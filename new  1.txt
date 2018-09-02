@@ -1,0 +1,29 @@
+* Relatório com nome e telefone de todos os passageiros de uma viagem
+* Exibir 15 clientes no resultado da busca por nome para alteraração
+* Os dependentes terão o mesmo endereço de seu titular
+* Diminuir texto livre para apenas uma linha na lista para transporte
+* Mudanças na lista para seguro viagem:
+    * Retirar nome do ônibus
+    * Retirar o espaço para texto livre
+    * Exibir todos os passageiros em apenas uma lista, independente do ônibus
+
+*cliente.class.php
+*viagem.class.php
+*viagem.contatos.php
+*viagem.lista_seguradora.php
+*viagem.lista_transporte.php
+*viagem.relatorios.php
+*viagem.cadastrar.php
+*viagem.alterar.php
+*cliente.alterar.php
+	
+update cliente
+inner join cliente_dependentes on cliente_dependentes.id_dependente = cliente.id
+	inner join cliente titular on titular.id = cliente_dependentes.id_titular
+  set
+	cliente.endereco = titular.endereco,
+		cliente.numero = titular.numero,
+		cliente.complemento = titular.complemento,
+		cliente.bairro = titular.bairro,
+		cliente.cep = titular.cep,
+		cliente.id_cidade = titular.id_cidade

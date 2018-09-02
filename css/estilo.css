@@ -1,0 +1,330 @@
+@CHARSET "ISO-8859-1";
+input, select {
+	text-transform: uppercase;
+}
+.usuario {
+	float:left;
+	background: url(images/ui-icons_cc0000_256x240.png);
+	background-position: -144px -96px;
+	width: 16px;
+	height: 16px;
+}
+.label_usuario {
+	position: absolute;
+	font-size: 14px;
+	margin-left: 15px;
+}
+#login_topo {
+	width: 485px;
+	margin-left: auto;
+	margin-right: auto;
+	color: #005dc1;
+	font-size: 40px;
+	font-weight: bold;
+	height: 30%;
+	position: relative;
+}
+#login_topo label {
+	position: absolute;
+	bottom: 0;
+}
+#login_form {
+	width: 100%;
+	/*background: #005dc1;*/
+	background: url("images/fundo_login.png");
+	background-repeat: repeat;
+	height: 70%;
+	padding-top: 15px;
+	border-top: 3px solid #000;
+}
+#login_form div {
+	width: 350px;
+	margin-left: auto;
+	margin-right: auto;
+}
+#login_form label {
+	font-weight: bold;
+	font-size: 20px;
+	width: 90px;
+	float: left;
+	display: block;
+	color: #fff;
+}
+.titulo_tela {
+	width:1000px;
+	font-size:22px;
+	font-weight: bold;
+	margin-left: auto;
+	margin-right: auto;
+}
+.conteudo {
+	width:1000px;
+	border-radius: 10px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.titulo_dados {
+	background-image:url("images/fundo_titulo.png");
+	width:100%;
+	display: block;
+	color: #fff;
+	text-align: center;
+	font-weight:bold;
+	font-size: 18px;
+	margin: 0 0 10px 0;
+	padding: 0px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	border-bottom: 2px solid #fff;
+}
+fieldset {
+	background-color:#e2e0e0;
+	margin: 0 0 10px 0;
+	padding: 0 0 10px 0;
+	border-radius: 10px;
+	border: 1px solid #333;
+}
+.lista {
+	width: 100%;
+}
+.lista thead{
+	color: #000;
+	background-color: #b9c9fd;
+	/*background: url("images/fundo_header.png");
+	background-repeat: repeat;*/
+	font-weight: bold;
+	text-align: center;
+}
+.lista thead td{
+	border: 1px solid #fff;
+	padding-left: 3px;
+}
+.lista .linha{
+	color: #000;
+	text-align: center;
+	background-color: #fff;
+	border-bottom: 2px;
+	border-top: 2px;
+	font-weight: normal;
+	padding-top:0.1em;
+}
+.lista .remover_linha {
+	background-color: #cc0000;
+	text-align: center;
+}
+.td_esquerda {
+	text-align:left;
+	padding-left:3px;	
+}
+.lista .vazio {
+	font-weight: bold;
+	font-style: italic;
+	font-family: serif;
+}
+.lista .add_linha {
+	color: #000;
+	text-align: center;
+	background-color: #409cfa;
+	border-bottom: 2px;
+	border-top: 2px;
+	font-weight: normal;
+}
+.lista .add_linha_historico {
+	color: #000;
+	text-align: center;
+	background-color: #fff;
+	border-bottom: 2px;
+	border-top: 2px;
+	font-weight: normal;
+}
+.lista .linha:hover{
+	background-color: #409cfa;
+	color: #fff;
+}
+.lista .linha_espaco {
+	padding: 2px;
+}
+.lista .linha_cliente {
+	text-align:left;
+	font-weight:bold;
+	background: #eee;
+}
+.lista .linha_cliente td {
+	padding-left:5px;	
+}
+.lista .linha_cliente label {
+	float: left;
+	display: block;
+}
+.lista .linha_busca {
+	text-align: left;
+	/*background-color: #90EE90;*/
+	border-bottom: 2px;
+	border-top: 2px;
+	padding-top:0.1em;
+}
+.td_busca {
+	background-color: #90EE90;
+}
+.label_campo {
+	font-weight: bold;
+	margin-left: 10px;
+	font-size: 16px;
+}
+.quantidade {
+	width:30px;
+}
+input.error,
+select.error {
+	background-color: #FFCCC9;
+}
+.caixa {
+	position: fixed;
+}
+.caixa .ui-dialog-titlebar-close {
+	display: none;
+}
+.interrogacao {
+	cursor: pointer;
+}
+.espaco {
+	margin-bottom: 5px;
+	clear: both;
+}
+.botoes {
+	margin-left: auto;
+	width: 1000px;
+}
+.ui-tooltip {
+	padding: 6px;
+	font-size: 14px;
+	font-weight: bold;
+	color: #FFF;
+	background: #FF3c3c;
+	border-color: #FFF;
+}
+.div_telefones {
+	width:500px;
+	margin-left:8px;
+}
+#div_titular, #div_dependentes {
+	width:755px;
+	display:none;
+}
+.ui-state-active {
+	border: 1px solid #0073ea;
+	background: #0073ea url(images/ui-bg_highlight-soft_25_0073ea_1x100.png) 50% 50% repeat-x;
+	font-weight: bold;
+	color: #ffffff;
+}
+.ui-widget-header {
+	background: #0073ea;
+	color: #fff;
+}
+.ui-accordion .ui-accordion-header {
+	padding-bottom: 0;
+    padding-left: 2em;
+    padding-top: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.ui-accordion .ui-accordion-content {
+    padding: 0;
+    background: #eee;
+}
+#mensagem {
+	font-weight: bold;
+}
+.btn_remover, .btn_editar, .btn_remover_sinal {
+	width: 16px;
+	height: 16px;
+	background: url(images/ui-icons_cc0000_256x240.png);
+	cursor: pointer;
+	margin-left: auto;
+	margin-right: auto;
+}
+.btn_remover_rooming {
+	width: 16px;
+	height: 16px;
+	background: url(images/ui-icons_cc0000_256x240.png);
+	cursor: pointer;
+	float: left;
+	margin-top: 2px;
+}
+.btn_remover, .btn_remover_rooming, .btn_remover_sinal {
+	background-position: -32px -192px;
+}
+.btn_adicionar {
+	float: right;
+}
+.btn_editar {
+	background-position: -64px -112px;
+}
+.btn_remover .ui-button-text, .btn_editar .ui-button-text, .btn_remover_sinal .ui-button-text {
+	padding: 0;
+}
+.btn_info {
+	width: 16px;
+	height: 16px;
+	background-image: url("images/ui-icons_cc0000_256x240.png");
+	background-position: -16px -144px;
+	float: right;
+	margin-right: 10%;
+	cursor: pointer;
+	margin-top: 1px;
+}
+.btn_info_viagem {
+	width: 16px;
+	height: 16px;
+	background-image: url("images/ui-icons_cc0000_256x240.png");
+	background-position: -16px -144px;
+	margin-left: 5px;
+	cursor: pointer;
+	margin-top: 1px;
+	float: left;
+}
+.esquerda {
+	display: block;
+	float: left;
+}
+.cliente_rooming {
+	float: left;
+	margin-right: 2px;
+}
+.sinais {
+	width: 50%;
+}
+#parametros, .btn_relatorio {
+	margin-left:10px;
+}
+#parametros label {
+	font-weight: bold;
+	font-size: 16px;
+}
+#fieldset_informacoes .esquerda{
+	width: 60px;
+}
+#fieldset_endereco .esquerda{
+	width: 102px;
+}
+#fieldset_documentacao .esquerda{
+	width: 45px;
+}
+#fieldset_consulta .esquerda{
+	width: 50px;
+}
+#fieldset_banco .esquerda{
+	width: 102px;
+}
+#fieldset_restaurante .esquerda{
+	width: 95px;
+}
+#fieldset_hotel .esquerda {
+	width: 65px;
+}
+#fieldset_ponto .esquerda {
+	width: 65px;
+}
+#fieldset_acesso .esquerda {
+	width: 100px;
+}
