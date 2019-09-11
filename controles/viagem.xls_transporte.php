@@ -19,6 +19,12 @@ while ($cliente = mysql_fetch_assoc($clientes)) {
 
 $objPHPExcel = new PHPExcel();
 
+$objPHPExcel->getDefaultStyle()
+    ->getNumberFormat()
+    ->setFormatCode(
+        PHPExcel_Style_NumberFormat::FORMAT_TEXT
+    );
+
 $outline = array(
 	'borders' => array(
     	'outline' => array(

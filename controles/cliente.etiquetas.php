@@ -10,7 +10,7 @@ class ici extends TCPDF {
 	}
 	//exibir uma etiqueta
 	//$x = margem esquerda
-	function exibir($dados,$x=5) {
+	function exibir($dados,$x=3) {
 		$this->SetX($x);
 		//largura da etiqueta = 101.6
 		//altura da etiqueta = 25.4
@@ -24,11 +24,11 @@ class ici extends TCPDF {
 	}
 }
 
-$pdf = new ici(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LETTER', true, 'UTF-8', false);
+$pdf = new ici(PDF_PAGE_ORIENTATION, PDF_UNIT, 'A4', true, 'UTF-8', false);
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 $pdf->SetAutoPageBreak(false);
-//margem esquerda = 5; margem superior = 12.7
-$pdf->SetMargins(5, 12);
+//margem esquerda, margem superior
+$pdf->SetMargins(3, 12);
 
 //posicao vertical da etiqueta
 $posicao_vertical[0] = 12;
@@ -51,6 +51,8 @@ $posicao_vertical[16] = 215.2;
 $posicao_vertical[17] = 215.2;
 $posicao_vertical[18] = 240.6;
 $posicao_vertical[19] = 240.6;
+$posicao_vertical[20] = 266;
+$posicao_vertical[21] = 266;
 
 $pdf->AddPage();
 
@@ -62,8 +64,8 @@ if (mysql_num_rows($lista_cliente) > 0) {
 	$y_direita = '';
 	$espaco_vertical = 0;
 	while ($l = mysql_fetch_array($lista_cliente)) {
-		//20 etiquetas por pagina
-		if ($num > 19) {
+		//22 etiquetas por pagina
+		if ($num > 21) {
 			//nova pagina
 			$pdf->AddPage();
 			//margem superior
@@ -81,11 +83,10 @@ if (mysql_num_rows($lista_cliente) > 0) {
 		}
 		//coluna da direita
 		else {
-			//111.6 = margem da esquerda (margem inicial + largura da etiqueta + espaco entre etiquetas)
-			//4 + 101.6 + 6
+			//105.6 = margem da esquerda (margem inicial + largura da etiqueta + espaco entre etiquetas)
+			//3 + 101.6 + 2
 			$pdf->setY($posicao_vertical[$num]);
-			//$pdf->setXY(111.6,$y_direita);
-			$pdf->exibir($l,111.6);
+			$pdf->exibir($l,106.6);
 			//exibir proxima etiqueta do lado esquerdo
 			$posicao = '';
 		}
