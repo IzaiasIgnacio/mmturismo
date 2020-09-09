@@ -310,7 +310,7 @@ class viagem {
 		$sql = "update viagem set
 				viagem = '".campo_sql($valores['nome_viagem'])."',
 				data_saida = '".data_sql($valores['data_saida_viagem'])."',
-				valor = '".campo_sql($valores['valor_viagem'])."'
+				valor = '".str_replace(",",".",campo_sql($valores['valor_viagem']))."'
 					where id = ".$valores['id_viagem'];
 		$conexao -> query($sql);
 		$id_viagem = $valores['id_viagem'];

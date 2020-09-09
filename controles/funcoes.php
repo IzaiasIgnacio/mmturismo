@@ -13,7 +13,7 @@ function data_sql($data) {
 		return mysql_real_escape_string($d[2]."-".$d[1]."-".$d[0]);
 	}
 	else {
-		return 'null';
+		return null;
 	}
 }
 
