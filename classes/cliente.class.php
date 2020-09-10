@@ -165,12 +165,30 @@ class cliente {
 		require_once('controles/funcoes.php');
 		
 		$conexao -> begin();
-		
+
+		$nascimento = '';
+		$data_nascimento = data_sql($valores['data_nascimento']);
+		if (empty($data_nascimento)) {
+			$nascimento = "null";
+		}
+		else {
+			$nascimento = "'".$data_nascimento."'";
+		}
+
+		$casamento = '';
+		$data_casamento = data_sql($valores['data_casamento']);
+		if (empty($data_casamento)) {
+			$casamento = "null";
+		}
+		else {
+			$casamento = "'".$data_casamento."'";
+		}
+
 		$sql = "insert into cliente (cliente, sexo, cpf, rg, passaporte, data_nascimento, data_casamento,
 				endereco, numero, complemento, bairro, cep, email, id_cidade, id_orgao_emissor, id_situacao) values 
 				('".campo_sql($valores['cliente'])."', '".campo_sql($valores['sexo'])."', '".campo_sql($valores['cpf'])."',
-				'".campo_sql($valores['rg'])."', '".campo_sql($valores['passaporte'])."', '".data_sql($valores['data_nascimento'])."',
-				'".data_sql($valores['data_casamento'])."', '".campo_sql($valores['endereco'])."', '".campo_sql($valores['numero'])."',
+				'".campo_sql($valores['rg'])."', '".campo_sql($valores['passaporte'])."', ".$nascimento.",
+				".$casamento.", '".campo_sql($valores['endereco'])."', '".campo_sql($valores['numero'])."',
 				'".campo_sql($valores['complemento'])."', '".campo_sql($valores['bairro'])."', '".campo_sql($valores['cep'])."',
 				'".email_sql($valores['email'])."', nao_obrigatorio('".$valores['cidade']."'), nao_obrigatorio('".$valores['orgao_emissor']."'),
 				".campo_sql($valores['situacao']).")";
@@ -249,6 +267,24 @@ class cliente {
 		require_once('controles/funcoes.php');
 		
 		$conexao -> begin();
+
+		$nascimento = '';
+		$data_nascimento = data_sql($valores['data_nascimento']);
+		if (empty($data_nascimento)) {
+			$nascimento = "data_nascimento = null,";
+		}
+		else {
+			$nascimento = "data_nascimento = '".$data_nascimento."',";
+		}
+
+		$casamento = '';
+		$data_casamento = data_sql($valores['data_casamento']);
+		if (empty($data_casamento)) {
+			$casamento = "data_casamento = null,";
+		}
+		else {
+			$casamento = "data_casamento = '".$data_casamento."',";
+		}
 		
 		$sql = "update cliente set
 					cliente = '".campo_sql($valores['cliente'])."',
@@ -256,8 +292,8 @@ class cliente {
 					cpf = '".campo_sql($valores['cpf'])."',
 					rg = '".campo_sql($valores['rg'])."',
 					passaporte = '".campo_sql($valores['passaporte'])."',
-					data_nascimento = '".data_sql($valores['data_nascimento'])."',
-					data_casamento = '".data_sql($valores['data_casamento'])."',
+					".$nascimento."
+					".$casamento."
 					endereco = '".campo_sql($valores['endereco'])."',
 					numero = '".campo_sql($valores['numero'])."',
 					complemento = '".campo_sql($valores['complemento'])."',

@@ -8,7 +8,7 @@ function email_sql($valor) {
 }
 
 function data_sql($data) {
-	if ($data != '') {
+	if (!empty($data)) {
 		$d = explode("/",$data);
 		return mysql_real_escape_string($d[2]."-".$d[1]."-".$d[0]);
 	}
