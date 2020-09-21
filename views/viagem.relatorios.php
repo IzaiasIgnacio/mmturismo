@@ -151,7 +151,7 @@
 						$("#bairros").fadeOut();
 						$("#label_bairros").fadeOut();
 						$("#label_cabecalho").fadeOut();
-						$("#form").attr('action','controles/viagem.lista_seguradora.php');
+						$("#form").attr('action','controles/viagem.xls_seguradora.php');
 					});
 				break;
 				case 'transporte':

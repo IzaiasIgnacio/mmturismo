@@ -6,20 +6,15 @@ $viagem = new viagem();
 class ici extends TCPDF {
 	
 	public function Header() {
-		
-	/*}
-	
-	function cabecalho($empresa) {*/
 		$this->Sety(10);
 		$this->SetFont('helvetica', 'B', 20);
-		$this->Cell(0, 10, utf8_encode('AGÊNCIA 5M DE IRAJÁ LTDA'), 0, 1, 'C', 0, '', 0, false, 'M', 'M');
+		$this->Cell(0, 10, utf8_encode('AGï¿½NCIA 5M DE IRAJï¿½ LTDA'), 0, 1, 'C', 0, '', 0, false, 'M', 'M');
 		$this->SetFont('helvetica', '', 11);
 		$this->SetFont('helvetica', 'B', 14);
 		$this->Cell(0, 0, 'Listagem para Seguro Viagem', 0, 1, 'C', 0, '', 1);
 		
 		$this->Ln(3);
 		$this->SetFont('helvetica', 'B', 11);
-		//$this->Cell(0, 0, $this->empresa, 0, 1, 'C', 0, '', 1);
 		$this->Cell(125, 0, 'Nome dos Passageiros', 'B', 0, 'C', 0, '', 1);
 		$this->Cell(35, 0, 'CPF', 'B', 0, 'C', 0, '', 1);
 		$this->Cell(40, 0, 'Data de Nascimento', 'B', 1, 'C', 0, '', 1);
@@ -49,7 +44,6 @@ if (mysql_num_rows($lista_passageiros) > 0) {
 	foreach ($passageiros as $empresa => $pessoa) {
 		$pdf->empresa = utf8_encode($empresa);
 		$pdf->AddPage();
-		//$pdf->cabecalho(utf8_encode($empresa));
 		$c = 0;
 		foreach ($pessoa as $p) {
 			$pdf->Cell(125, 0, utf8_encode($p[0]), 'B', 0, 'L', 0, '', 1);

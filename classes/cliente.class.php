@@ -443,6 +443,19 @@ class cliente {
 		$r = $conexao -> query($sql);
 		return $r;
 	}
+
+	function lista_contatos() {
+		require_once('conexao.class.php');
+		$conexao = new conexao();
+		
+		$sql = "select cliente, group_concat(cliente_telefones.telefone separator ', ') as telefones, email
+					from cliente
+						left join cliente_telefones on cliente.id = id_cliente
+							group by cliente.id
+								order by cliente";
+		$r = $conexao -> query($sql);
+		return $r;
+	}
 	
 }
 ?>
