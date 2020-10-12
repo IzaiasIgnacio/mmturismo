@@ -184,7 +184,7 @@ foreach ($transportes_viagem as $numero => $transporte) {
 			$planilha->setCellValue('B'.$atual, sprintf("%02d", $i));
 			$planilha->setCellValue('C'.$atual, utf8_encode($c['cliente']));
 			$planilha->setCellValue('J'.$atual, $c['data_nascimento']);
-			$planilha->setCellValue('L'.$atual, $c['rg']);
+			$planilha->setCellValueExplicit('L'.$atual, $c['rg'], PHPExcel_Cell_DataType::TYPE_STRING);
 			$planilha->setCellValue('N'.$atual, utf8_encode($c['sigla']));
 			$atual++;
 			$i++;
