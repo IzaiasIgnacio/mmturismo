@@ -3,8 +3,8 @@ class viagem {
 
 	//excluir viagem
 	function excluir($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		
 		$conexao -> begin();
 
@@ -97,8 +97,8 @@ class viagem {
 	
 	//buscar dados de uma viagem
 	function buscar_dados($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem.*, date_format(data_saida,'%d/%m/%Y') as data_saida,
 				replace(valor,'.',',') as valor
@@ -110,8 +110,8 @@ class viagem {
 	
 	//buscar viagem por nome
 	function buscar($nome) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem.id, viagem.viagem, date_format(data_saida,'%d/%m/%Y') as data_saida
 					from viagem
@@ -124,8 +124,8 @@ class viagem {
 	
 	//buscar sinais
 	function buscar_sinais($tipo,$id) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select *
 					from viagem_".$tipo."_sinal
@@ -137,8 +137,8 @@ class viagem {
 	
 	//buscar destinos de uma viagem
 	function buscar_destinos($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem_destinos.id, cidade.id as id_cidade, cidade.cidade, estado.sigla
 					from viagem_destinos
@@ -151,8 +151,8 @@ class viagem {
 	
 	//buscar transportes de uma viagem
 	function buscar_transportes($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem_transporte.id, empresa.empresa, tipo_transporte.tipo_transporte,
 				viagem_transporte.quantidade, viagem_transporte.contato, viagem_transporte.valor,
@@ -168,8 +168,8 @@ class viagem {
 	
 	//buscar bairros de uma viagem
 	function buscar_bairros($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select ponto_embarque.id, ponto_embarque.bairro
 					from ponto_embarque
@@ -182,8 +182,8 @@ class viagem {
 	
 	//buscar restaurantes de uma viagem
 	function buscar_restaurantes($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem_restaurante.*, restaurante.restaurante, cidade.cidade, estado.sigla
 					from viagem_restaurante
@@ -197,8 +197,8 @@ class viagem {
 	
 	//buscar hoteis de uma viagem
 	function buscar_hoteis($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem_hotel.*, hotel.hotel, cidade.cidade, estado.sigla,
 				date_format(data_chegada,'%d/%m/%Y') as data_chegada,
@@ -214,8 +214,8 @@ class viagem {
 	
 	//buscar clientes de uma viagem
 	function buscar_clientes($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem_cliente.*, cliente.id as id_cliente, cliente.cliente,
 				date_format(cliente.data_nascimento,'%d/%m/%Y') as data_nascimento,
@@ -240,8 +240,8 @@ class viagem {
 	
 	//buscar rooming list de uma viagem
 	function buscar_rooming($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem_rooming_list.*, group_concat(viagem_cliente.id_cliente) as clientes,
 				group_concat(cliente.cliente) as nome_clientes, acomodacao.acomodacao
@@ -258,8 +258,8 @@ class viagem {
 	
 	//buscar rooming list de um hotel
 	function buscar_rooming_hotel($hotel) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem_rooming_list.*, group_concat(viagem_cliente.id_cliente) as clientes,
 				group_concat(cliente.cliente) as nome_clientes, acomodacao.acomodacao
@@ -279,8 +279,8 @@ class viagem {
 	
 	//buscar hoteis de uma rooming list
 	function buscar_hoteis_rooming($viagem,$indice_rooming) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select group_concat(viagem_rooming_hotel.id_hotel_viagem) as hoteis,
 				group_concat(concat(hotel.hotel,' (',date_format(viagem_hotel.data_chegada,'%d/%m/%Y'),')') separator ', ') as nome_hoteis
@@ -294,8 +294,8 @@ class viagem {
 	}
 	
 	function alterar($valores) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		require_once('controles/funcoes.php');
 	
 		$empresas_clientes = array();
@@ -726,8 +726,8 @@ class viagem {
 	}
 	
 	function cadastrar($valores) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		require_once('controles/funcoes.php');
 		
 		$empresas_clientes = array();
@@ -912,8 +912,8 @@ class viagem {
 	}
 	
 	function lista_etiquetas($valores) {
-		require_once ('conexao.class.php');
-		$conexao = new conexao();
+		require_once ('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select cliente.cliente, viagem_rooming_list.apto,
 				hotel.hotel, cidade.cidade, estado.sigla,
@@ -936,8 +936,8 @@ class viagem {
 	}
 	
 	function lista_seguro($viagem) {
-		require_once ('conexao.class.php');
-		$conexao = new conexao();
+		require_once ('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select cliente.cliente, if (cliente.cpf='',if(titular.cpf='','',concat(titular.cpf,' (Resp.)')),cliente.cpf) as cpf,
 				date_format(cliente.data_nascimento,'%d/%m/%Y') as data_nascimento, empresa.empresa,
@@ -956,8 +956,8 @@ class viagem {
 	}
 	
 	function lista_transportes($viagem) {
-		require_once ('conexao.class.php');
-		$conexao = new conexao();
+		require_once ('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select viagem_transporte.id, viagem_transporte.quantidade, empresa.empresa
 					from viagem_transporte
@@ -969,8 +969,8 @@ class viagem {
 	}
 	
 	function passageiros_pontos($transporte,$numero) {
-		require_once ('conexao.class.php');
-		$conexao = new conexao();
+		require_once ('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select viagem_cliente.*, group_concat(concat(cliente.cliente,'|',poltrona)) as clientes,
 				concat(ponto_embarque.bairro,' - ',ponto_embarque.local) as ponto
@@ -984,8 +984,8 @@ class viagem {
 	}
 	
 	function rooming_list($viagem) {
-		require_once ('conexao.class.php');
-		$conexao = new conexao();
+		require_once ('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select viagem_rooming_list.*, group_concat(cliente.cliente separator ' / ')  as clientes,
 				acomodacao.acomodacao
@@ -1000,8 +1000,8 @@ class viagem {
 	}
 
 	function lista_passageiros($viagem) {
-		require_once ('conexao.class.php');
-		$conexao = new conexao();
+		require_once ('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select cliente, rg, sigla, empresa.empresa, viagem_cliente.numero_transporte,
 				tipo_transporte.tipo_transporte
@@ -1018,8 +1018,8 @@ class viagem {
 	}
 	
 	function contatos_passageiros($viagem) {
-		require_once ('conexao.class.php');
-		$conexao = new conexao();
+		require_once ('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select cliente, group_concat(cliente_telefones.telefone separator ', ') as telefones
 					from cliente

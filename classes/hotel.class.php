@@ -3,22 +3,21 @@ class hotel {
 	
 	//buscar dados de um hotel
 	function buscar_dados($hotel) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select hotel.*, cidade.id_estado, cidade.id as cidade
 					from hotel
 						left join cidade on cidade.id = hotel.id_cidade
 							where hotel.id = ".$hotel;
 	
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar historico de reservas de um hotel
 	function buscar_historico($valores) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		require_once('../controles/funcoes.php');
 	
 		$comp = '';
@@ -49,76 +48,86 @@ class hotel {
 	
 	//listar hoteis de uma cidade
 	function listar($cidade) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select hotel.id, hotel.hotel
 					from hotel
 						where id_cidade = ".$cidade."
 							order by hotel";
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar hotel por nome
 	function buscar($nome) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select hotel.id, hotel.hotel
 					from hotel
 						where hotel like '%".utf8_decode($nome)."%'
 							order by hotel
 								limit 10";
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar telefones de um hotel
 	function buscar_telefones($hotel) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select hotel_telefones.id, hotel_telefones.telefone
 					from hotel_telefones
 						where hotel_telefones.id_hotel = ".$hotel;
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar bancos de um hotel
 	function buscar_bancos($hotel) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select hotel_bancos.*
 					from hotel_bancos
 						where hotel_bancos.id_hotel = ".$hotel;
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//alterar hotel
 	function alterar($valores) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		require_once('controles/funcoes.php');
 		
 		$conexao -> begin();
+
+		$dados = [
+			'hotel' => campo_sql($valores['hotel']),
+			'endereco' => campo_sql($valores['endereco']),
+			'numero' => campo_sql($valores['numero']),
+			'complemento' => campo_sql($valores['complemento']),
+			'bairro' => campo_sql($valores['bairro']),
+			'cep' => campo_sql($valores['cep']),
+			'cnpj' => campo_sql($valores['cnpj']),
+			'site' => campo_sql($valores['site']),
+			'email' => email_sql($valores['email']),
+			'id_cidade' => campo_sql($valores['cidade']),
+			'id_hotel' => $valores['id_hotel']
+		];
 		
 		$sql = "update hotel set
-					hotel = '".campo_sql($valores['hotel'])."',
-					endereco = '".campo_sql($valores['endereco'])."',
-					numero = '".campo_sql($valores['numero'])."',
-					complemento = '".campo_sql($valores['complemento'])."',
-					bairro = '".campo_sql($valores['bairro'])."',
-					cep = '".campo_sql($valores['cep'])."',
-					cnpj = '".campo_sql($valores['cnpj'])."',
-					site = '".campo_sql($valores['site'])."',
-					email = '".email_sql($valores['email'])."',
-					id_cidade = ".campo_sql($valores['cidade'])."
-						where id = ".$valores['id_hotel'];
-		$conexao -> query($sql);
+					hotel = :hotel,
+					endereco = :endereco,
+					numero = :numero,
+					complemento = :complemento,
+					bairro = :bairro,
+					cep = :cep,
+					cnpj = :cnpj,
+					site = :site,
+					email = :email,
+					id_cidade = :id_cidade
+						where id = :id_hotel";
+		$conexao -> execute($sql, $dados);
 		
 		if ($valores['excluir_telefones'] != '') {
 			$excluir = explode("|",$valores['excluir_telefones']);
@@ -127,7 +136,7 @@ class hotel {
 				$sql .= $e.",";
 			}
 			$sql = substr($sql,0,-1).")";
-			$conexao -> query($sql);
+			$conexao -> execute($sql);
 		}
 		
 		$c = 0;
@@ -139,7 +148,7 @@ class hotel {
 					if ($_POST['telefone_'.$c] == '') {
 						$sql = "insert into hotel_telefones (telefone, id_hotel) values ";
 						$sql .= "('".campo_sql($tel)."',".$valores['id_hotel'].")";
-						$conexao -> query($sql);
+						$conexao -> execute($sql);
 					}
 				}
 				$c++;
@@ -153,7 +162,7 @@ class hotel {
 				$sql .= $e.",";
 			}
 			$sql = substr($sql,0,-1).")";
-			$conexao -> query($sql);
+			$conexao -> execute($sql);
 		}
 		
 		$c = 0;
@@ -167,7 +176,7 @@ class hotel {
 						$sql = "insert into hotel_bancos (banco, agencia, conta, titular, cpf_cnpj, id_hotel) values ";
 						$sql .= "('".campo_sql($b[0])."','".campo_sql($b[1])."','".campo_sql($b[2])."','".campo_sql($b[3])."',
 								'".campo_sql($b[4])."',".$valores['id_hotel'].")";
-					$conexao -> query($sql);
+					$conexao -> execute($sql);
 					}
 				}
 				$c++;
@@ -179,19 +188,29 @@ class hotel {
 	
 	//cadastrar hotel
 	function cadastrar($valores) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		require_once('controles/funcoes.php');
 		
 		$conexao -> begin();
 
+		$dados = [
+			'hotel' => campo_sql($valores['hotel']),
+			'endereco' => campo_sql($valores['endereco']),
+			'numero' => campo_sql($valores['numero']),
+			'complemento' => campo_sql($valores['complemento']),
+			'bairro' => campo_sql($valores['bairro']),
+			'cep' => campo_sql($valores['cep']),
+			'cnpj' => campo_sql($valores['cnpj']),
+			'site' => campo_sql($valores['site']),
+			'email' => email_sql($valores['email']),
+			'cidade' => $valores['cidade']
+		];
+
 		$sql = "insert into hotel (hotel, endereco, numero, complemento, bairro, cep, cnpj, site, email, id_cidade) values 
-				('".campo_sql($valores['hotel'])."', '".campo_sql($valores['endereco'])."', '".campo_sql($valores['numero'])."',
-				'".campo_sql($valores['complemento'])."', '".campo_sql($valores['bairro'])."', '".campo_sql($valores['cep'])."',
-				'".campo_sql($valores['cnpj'])."', '".campo_sql($valores['site'])."', '".email_sql($valores['email'])."',
-				".$valores['cidade'].")";
-		$r = $conexao -> query($sql);
-		$id_hotel = mysql_insert_id();
+				(:hotel, :endereco, :numero, :complemento, :bairro, :cep, :cnpj, :site, :email, :id_cidade)";
+		$conexao -> execute($sql, $dados);
+		$id_hotel = $conexao->lastInsertId();
 		
 		if ($valores['lista_telefones'] != '') {
 			$telefones = explode("|", $valores['lista_telefones']);
@@ -199,7 +218,7 @@ class hotel {
 				if ($tel != '') {
 					$sql = "insert into hotel_telefones (telefone, id_hotel) values ";
 					$sql .= "('".campo_sql($tel)."',".$id_hotel.")";
-					$conexao -> query($sql);
+					$conexao -> execute($sql);
 				}
 			}
 		}
@@ -212,7 +231,7 @@ class hotel {
 					$sql = "insert into hotel_bancos (banco, agencia, conta, titular, cpf_cnpj, id_hotel) values ";
 					$sql .= "('".campo_sql($b[0])."','".campo_sql($b[1])."','".campo_sql($b[2])."','".campo_sql($b[3])."',
 							'".campo_sql($b[4])."',".$id_hotel.")";
-					$conexao -> query($sql);
+					$conexao -> execute($sql);
 				}
 			}
 		}

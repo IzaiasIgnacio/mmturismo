@@ -6,14 +6,14 @@ controle_acesso('menu');
 	<div id='menu'>
 		<ul>
 			<li><a href='index.php'><span>PRINCIPAL</span></a></li>
-			<?php while ($m = mysql_fetch_array($menu)) { ?>
-			<li><a href='#'><span><?php echo utf8_encode($m['menu']); ?></span></a>
+			<?php foreach($menu as $m) { ?>
+			<li><a href='#'><span><?php echo $m['menu']; ?></span></a>
 				<ul>
 					<?php
 					$pag = explode(",",$m['paginas']);
 					$end = explode(",",$m['enderecos']);
 					foreach ($pag as $i => $p) {
-						echo "<li><a href='?pag=views/".$end[$i]."'><span>&nbsp;".utf8_encode($p)."</span></a></li>";
+						echo "<li><a href='?pag=views/".$end[$i]."'><span>&nbsp;".$p."</span></a></li>";
 					}
 					?>
 				</ul>

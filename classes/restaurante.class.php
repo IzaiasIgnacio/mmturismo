@@ -3,22 +3,21 @@ class restaurante {
 	
 	//buscar dados de um restaurante
 	function buscar_dados($restaurante) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select restaurante.*, cidade.id_estado, cidade.id as cidade
 					from restaurante
 						left join cidade on cidade.id = restaurante.id_cidade
 							where restaurante.id = ".$restaurante;
 	
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar historico de reservas de um restaurante
 	function buscar_historico($valores) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		require_once('../controles/funcoes.php');
 	
 		$comp = '';
@@ -49,76 +48,86 @@ class restaurante {
 	
 	//listar restaurantes de uma cidade
 	function listar($cidade) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select restaurante.id, restaurante.restaurante
 					from restaurante
 						where id_cidade = ".$cidade."
 							order by restaurante";
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar restaurante por nome
 	function buscar($nome) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select restaurante.id, restaurante.restaurante
 					from restaurante
 						where restaurante like '%".utf8_decode($nome)."%'
 							order by restaurante
 								limit 10";
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar telefones de um restaurante
 	function buscar_telefones($restaurante) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select restaurante_telefones.id, restaurante_telefones.telefone
 					from restaurante_telefones
 						where restaurante_telefones.id_restaurante = ".$restaurante;
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar bancos de um restaurante
 	function buscar_bancos($restaurante) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select restaurante_bancos.*
 					from restaurante_bancos
 						where restaurante_bancos.id_restaurante = ".$restaurante;
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//alterar restaurante
 	function alterar($valores) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		require_once('controles/funcoes.php');
 	
 		$conexao -> begin();
+
+		$dados = [
+			'restaurante' => campo_sql($valores['restaurante']),
+			'endereco' => campo_sql($valores['endereco']),
+			'numero' => campo_sql($valores['numero']),
+			'complemento' => campo_sql($valores['complemento']),
+			'bairro' => campo_sql($valores['bairro']),
+			'cep' => campo_sql($valores['cep']),
+			'cnpj' => campo_sql($valores['cnpj']),
+			'site' => campo_sql($valores['site']),
+			'email' => email_sql($valores['email']),
+			'id_cidade' => campo_sql($valores['cidade']),
+			'id_restaurante' => $valores['id_restaurante']
+		];
 	
 		$sql = "update restaurante set
-					restaurante = '".campo_sql($valores['restaurante'])."',
-					endereco = '".campo_sql($valores['endereco'])."',
-					numero = '".campo_sql($valores['numero'])."',
-					complemento = '".campo_sql($valores['complemento'])."',
-					bairro = '".campo_sql($valores['bairro'])."',
-					cep = '".campo_sql($valores['cep'])."',
-					cnpj = '".campo_sql($valores['cnpj'])."',
-					site = '".campo_sql($valores['site'])."',
-					email = '".email_sql($valores['email'])."',
-					id_cidade = ".campo_sql($valores['cidade'])."
-						where id = ".$valores['id_restaurante'];
-		$conexao -> query($sql);
+					restaurante = :restaurante,
+					endereco = :endereco,
+					numero = :numero,
+					complemento = :complemento,
+					bairro = :bairro,
+					cep = :cep,
+					cnpj = :cnpj,
+					site = :site,
+					email = :email,
+					id_cidade = :id_cidade
+						where id = :id_restaurante";
+		$conexao -> execute($sql, $dados);
 	
 		if ($valores['excluir_telefones'] != '') {
 			$excluir = explode("|",$valores['excluir_telefones']);
@@ -127,7 +136,7 @@ class restaurante {
 				$sql .= $e.",";
 			}
 			$sql = substr($sql,0,-1).")";
-			$conexao -> query($sql);
+			$conexao -> execute($sql);
 		}
 	
 		$c = 0;
@@ -139,7 +148,7 @@ class restaurante {
 					if ($_POST['telefone_'.$c] == '') {
 						$sql = "insert into restaurante_telefones (telefone, id_restaurante) values ";
 						$sql .= "('".campo_sql($tel)."',".$valores['id_restaurante'].")";
-						$conexao -> query($sql);
+						$conexao -> execute($sql);
 					}
 				}
 				$c++;
@@ -153,7 +162,7 @@ class restaurante {
 				$sql .= $e.",";
 			}
 			$sql = substr($sql,0,-1).")";
-			$conexao -> query($sql);
+			$conexao -> execute($sql);
 		}
 	
 		$c = 0;
@@ -167,7 +176,7 @@ class restaurante {
 						$sql = "insert into restaurante_bancos (banco, agencia, conta, titular, cpf_cnpj, id_restaurante) values ";
 						$sql .= "('".campo_sql($b[0])."','".campo_sql($b[1])."','".campo_sql($b[2])."','".campo_sql($b[3])."',
 								'".campo_sql($b[4])."',".$valores['id_restaurante'].")";
-						$conexao -> query($sql);
+						$conexao -> execute($sql);
 					}
 				}
 				$c++;
@@ -179,19 +188,29 @@ class restaurante {
 	
 	//cadastrar restaurante
 	function cadastrar($valores) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		require_once('controles/funcoes.php');
 		
 		$conexao -> begin();
 
+		$dados = [	
+			'restaurante' => campo_sql($valores['restaurante']),
+			'endereco' => campo_sql($valores['endereco']),
+			'numero' => campo_sql($valores['numero']),
+			'complemento' => campo_sql($valores['complemento']),
+			'bairro' => campo_sql($valores['bairro']),
+			'cep' => campo_sql($valores['cep']),
+			'cnpj' => campo_sql($valores['cnpj']),
+			'site' => campo_sql($valores['site']),
+			'email' => email_sql($valores['email']),
+			'cidade' => $valores['cidade']
+		];
+
 		$sql = "insert into restaurante (restaurante, endereco, numero, complemento, bairro, cep, cnpj, site, email, id_cidade) values 
-				('".campo_sql($valores['restaurante'])."', '".campo_sql($valores['endereco'])."', '".campo_sql($valores['numero'])."',
-				'".campo_sql($valores['complemento'])."', '".campo_sql($valores['bairro'])."', '".campo_sql($valores['cep'])."',
-				'".campo_sql($valores['cnpj'])."', '".campo_sql($valores['site'])."', '".email_sql($valores['email'])."',
-				".$valores['cidade'].")";
-		$r = $conexao -> query($sql);
-		$id_restaurante = mysql_insert_id();
+				(:restaurante, :endereco, :numero, :complemento, :bairro, :cep, :cnpj, :site, :email, :id_cidade)";
+		$conexao -> execute($sql, $dados);
+		$id_restaurante = $conexao->lastInsertId();
 		
 		if ($valores['lista_telefones'] != '') {
 			$telefones = explode("|", $valores['lista_telefones']);
@@ -199,7 +218,7 @@ class restaurante {
 				if ($tel != '') {
 					$sql = "insert into restaurante_telefones (telefone, id_restaurante) values ";
 					$sql .= "('".campo_sql($tel)."',".$id_restaurante.")";
-					$conexao -> query($sql);
+					$conexao -> execute($sql);
 				}
 			}
 		}
@@ -211,7 +230,7 @@ class restaurante {
 				if (count($b) > 1) {
 					$sql = "insert into restaurante_bancos (banco, agencia, conta, titular, cpf_cnpj, id_restaurante) values ";
 					$sql .= "('".campo_sql($b[0])."','".campo_sql($b[1])."','".campo_sql($b[2])."','".campo_sql($b[3])."','".campo_sql($b[4])."',".$id_restaurante.")";
-					$conexao -> query($sql);
+					$conexao -> execute($sql);
 				}
 			}
 		}

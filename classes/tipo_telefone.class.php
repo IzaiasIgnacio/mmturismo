@@ -2,14 +2,12 @@
 class tipo_telefone {
 	
 	function listar() {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select *
 					from tipo_telefone";
-		$r = $conexao -> query($sql);
-		
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 }

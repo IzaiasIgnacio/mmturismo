@@ -1,20 +1,28 @@
 <?php
 function campo_sql($valor) {
-	return mb_strtoupper(mysql_real_escape_string(str_replace("_","",utf8_decode($valor))),'latin1');
+	return mb_strtoupper(str_replace("_","",$valor),'latin1');
 }
 
 function email_sql($valor) {
-	return mb_strtoupper(mysql_real_escape_string($valor),'latin1');
+	return mb_strtoupper($valor,'latin1');
 }
 
 function data_sql($data) {
 	if (!empty($data)) {
 		$d = explode("/",$data);
-		return mysql_real_escape_string($d[2]."-".$d[1]."-".$d[0]);
+		return $d[2]."-".$d[1]."-".$d[0];
 	}
 	else {
 		return null;
 	}
+}
+
+function nao_obrigatorio_sql($valor) {
+	if (empty($valor)) {
+		return null;
+	}
+
+	return $valor;
 }
 
 function idade($nascimento) {
@@ -28,4 +36,3 @@ function idade($nascimento) {
 
 	return ($idade > 5);
 }
-?>

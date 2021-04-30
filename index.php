@@ -156,13 +156,13 @@ controle_acesso('sessao');
 		</div>-->
 		<div id='mensagem' class="dialogo"></div>
 		<?php
-		if ($_SESSION['usuario'] != '') {
+		if (isset($_SESSION['usuario']) && $_SESSION['usuario'] != '') {
 			include('views/menu.php');
 		}
 		else {
 			$_GET['pag'] = 'views/login.php';
 		}
-		if ($_GET['pag'] != '') {
+		if (isset($_GET['pag']) && $_GET['pag'] != '') {
 			include($_GET['pag']);
 		}
 		?>

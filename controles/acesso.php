@@ -7,10 +7,10 @@ function controle_acesso($acao) {
 				$acesso = new acesso();
 				
 				$r = $acesso -> login($_POST);
-				if (mysql_num_rows($r) > 0) {
-					$nome = mysql_result($r,0,'nome');
-					$login = mysql_result($r,0,'login');
-					$id = mysql_result($r,0,'id');
+				if (!empty($r)) {
+					$nome = $r[0]['nome'];
+					$login = $r[0]['login'];
+					$id = $r[0]['id'];
 					$_SESSION['usuario'] = $nome;
 					$_SESSION['login'] = $login;
 					$_SESSION['id_usuario'] = $id;
@@ -26,7 +26,7 @@ function controle_acesso($acao) {
 		break;
 		case 'sessao':
 			//pagina restrita e sessao encerrada
-			if ($_SESSION['usuario'] == '' && ($_GET['pag'] != '' && $_GET['pag'] != 'views/login.php')) {
+			if (isset($_SESSION['usuario']) && $_SESSION['usuario'] == '' && ($_GET['pag'] != '' && $_GET['pag'] != 'views/login.php')) {
 				//cookie vazio
 				if ($_COOKIE['usuario'] == '') {
 					echo utf8_decode("<script>alert('Sessão encerrada');</script>");

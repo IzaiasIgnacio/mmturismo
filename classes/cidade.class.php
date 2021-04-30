@@ -2,17 +2,14 @@
 class cidade {
 	
 	function listar($estado) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select id, cidade
 					from cidade
-						where id_estado = ".$estado."
+						where id_estado = :estado
 							order by cidade";
-		$r = $conexao -> query($sql);
-		
-		return $r;
+		return $conexao -> query($sql, ['estado' => $estado]);
 	}
 	
 }
-?>

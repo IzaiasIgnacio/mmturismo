@@ -3,156 +3,146 @@ class viagem {
 
 	//excluir viagem
 	function excluir($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		
 		$conexao -> begin();
 
 		//buscar ids viagem_restaurante
 		$sql = "select id from viagem_restaurante where id_viagem = ".$viagem;
 		$resultado = $conexao -> query($sql);
-		if (mysql_num_rows($resultado) > 0) {
-			while ($restaurante = mysql_fetch_assoc($resultado)) {
-				$id_viagem_restaurante = $restaurante['id'];
-				
+		if (count($resultado) > 0) {
+			foreach ($resultado as $restaurante) {
 				//viagem_restaurante_sinal
-				$sql = "delete from viagem_restaurante_sinal where id_viagem_restaurante = ".$id_viagem_restaurante;
-				$conexao -> query($sql);
+				$sql = "delete from viagem_restaurante_sinal where id_viagem_restaurante = ".$restaurante['id'];
+				$conexao -> execute($sql);
 			}
 		}
 
 		//viagem_restaurante
 		$sql = "delete from viagem_restaurante where id_viagem = ".$viagem;
-		$conexao -> query($sql);
+		$conexao -> execute($sql);
 
 		//buscar ids viagem_cliente
 		$sql = "select id from viagem_cliente where id_viagem = ".$viagem;
 		$resultado = $conexao -> query($sql);
-		if (mysql_num_rows($resultado) > 0) {
-			while ($viagem_cliente = mysql_fetch_assoc($resultado)) {
-				$id_viagem_cliente = $viagem_cliente['id'];
-				
+		if (count($resultado) > 0) {
+			foreach ($resultado as $viagem_cliente) {
 				//viagem_cliente_rooming
-				$sql = "delete from viagem_cliente_rooming where id_viagem_cliente = ".$id_viagem_cliente;
-				$conexao -> query($sql);
+				$sql = "delete from viagem_cliente_rooming where id_viagem_cliente = ".$viagem_cliente['id'];
+				$conexao -> execute($sql);
 			}
 		}
 
 		//viagem_rooming_list
 		$sql = "delete from viagem_rooming_list where id_viagem = ".$viagem;
-		$conexao -> query($sql);
+		$conexao -> execute($sql);
 
 		//viagem_cliente
 		$sql = "delete from viagem_cliente where id_viagem = ".$viagem;
-		$conexao -> query($sql);
+		$conexao -> execute($sql);
 		
 		//buscar ids viagem_transporte
 		$sql = "select id from viagem_transporte where id_viagem = ".$viagem;
 		$resultado = $conexao -> query($sql);
-		if (mysql_num_rows($resultado) > 0) {
-			while ($transporte = mysql_fetch_assoc($resultado)) {
-				$id_viagem_transporte = $transporte['id'];
-				
+		if (count($resultado) > 0) {
+			foreach ($resultado as $transporte) {
 				//viagem_transporte_sinal
-				$sql = "delete from viagem_transporte_sinal where id_viagem_transporte = ".$id_viagem_transporte;
-				$conexao -> query($sql);
+				$sql = "delete from viagem_transporte_sinal where id_viagem_transporte = ".$transporte['id'];
+				$conexao -> execute($sql);
 			}
 		}
 		
 		//viagem_transporte
 		$sql = "delete from viagem_transporte where id_viagem = ".$viagem;
-		$conexao -> query($sql);
+		$conexao -> execute($sql);
 
 		//buscar ids viagem_hotel
 		$sql = "select id from viagem_hotel where id_viagem = ".$viagem;
 		$resultado = $conexao -> query($sql);
-		if (mysql_num_rows($resultado) > 0) {
-			while ($hotel = mysql_fetch_assoc($resultado)) {
+		if (count($resultado) > 0) {
+			foreach ($resultado as $hotel) {
 				$id_viagem_hotel = $hotel['id'];
 				
 				//viagem_rooming_hotel
 				$sql = "delete from viagem_rooming_hotel where id_hotel_viagem = ".$id_viagem_hotel;
-				$conexao -> query($sql);
+				$conexao -> execute($sql);
 				
 				//viagem_hotel_sinal
 				$sql = "delete from viagem_hotel_sinal where id_viagem_hotel = ".$id_viagem_hotel;
-				$conexao -> query($sql);
+				$conexao -> execute($sql);
 			}
 		}
 
 		//viagem_hotel
 		$sql = "delete from viagem_hotel where id_viagem = ".$viagem;
-		$conexao -> query($sql);
+		$conexao -> execute($sql);
 
 		//destinos
 		$sql = "delete from viagem_destinos where id_viagem = ".$viagem;
-		$conexao -> query($sql);
+		$conexao -> execute($sql);
 
 		//viagem
 		$sql = "delete from viagem where id = ".$viagem;
-		$conexao -> query($sql);
+		$conexao -> execute($sql);
 		
 		$conexao -> commit();
 	}
 	
 	//buscar dados de uma viagem
 	function buscar_dados($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem.*, date_format(data_saida,'%d/%m/%Y') as data_saida,
 				replace(valor,'.',',') as valor
 					from viagem
 						where viagem.id = ".$viagem;
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar viagem por nome
 	function buscar($nome) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem.id, viagem.viagem, date_format(data_saida,'%d/%m/%Y') as data_saida
 					from viagem
 						where viagem like '%".utf8_decode($nome)."%'
 							order by viagem
 								limit 10";
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar sinais
 	function buscar_sinais($tipo,$id) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select *
 					from viagem_".$tipo."_sinal
 						where id_viagem_".$tipo." = ".$id."
 							order by data desc";
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar destinos de uma viagem
 	function buscar_destinos($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem_destinos.id, cidade.id as id_cidade, cidade.cidade, estado.sigla
 					from viagem_destinos
 						inner join cidade on cidade.id = viagem_destinos.id_cidade
 						inner join estado on estado.id = cidade.id_estado
 							where viagem_destinos.id_viagem = ".$viagem;
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar transportes de uma viagem
 	function buscar_transportes($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem_transporte.id, empresa.empresa, tipo_transporte.tipo_transporte,
 				viagem_transporte.quantidade, viagem_transporte.contato, viagem_transporte.valor,
@@ -162,28 +152,26 @@ class viagem {
 						inner join tipo_transporte on tipo_transporte.id = empresa_tipo_transporte.id_tipo_transporte
 						inner join empresa on empresa.id = empresa_tipo_transporte.id_empresa
 							where viagem_transporte.id_viagem = ".$viagem;
-		$r = $conexao -> query($sql);
-		return $r;
+		return= $conexao -> query($sql);
 	}
 	
 	//buscar bairros de uma viagem
 	function buscar_bairros($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select ponto_embarque.id, ponto_embarque.bairro
 					from ponto_embarque
 						inner join viagem_cliente on viagem_cliente.id_ponto_embarque = ponto_embarque.id
 							where viagem_cliente.id_viagem = ".$viagem."
 								group by ponto_embarque.id";
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar restaurantes de uma viagem
 	function buscar_restaurantes($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem_restaurante.*, restaurante.restaurante, cidade.cidade, estado.sigla
 					from viagem_restaurante
@@ -191,14 +179,13 @@ class viagem {
 						inner join cidade on cidade.id = restaurante.id_cidade
 						inner join estado on estado.id = cidade.id_estado
 							where viagem_restaurante.id_viagem = ".$viagem;
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar hoteis de uma viagem
 	function buscar_hoteis($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem_hotel.*, hotel.hotel, cidade.cidade, estado.sigla,
 				date_format(data_chegada,'%d/%m/%Y') as data_chegada,
@@ -208,14 +195,13 @@ class viagem {
 						inner join cidade on cidade.id = hotel.id_cidade
 						inner join estado on estado.id = cidade.id_estado
 							where viagem_hotel.id_viagem = ".$viagem;
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar clientes de uma viagem
 	function buscar_clientes($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem_cliente.*, cliente.id as id_cliente, cliente.cliente,
 				date_format(cliente.data_nascimento,'%d/%m/%Y') as data_nascimento,
@@ -234,14 +220,13 @@ class viagem {
 						left join tipo_transporte on tipo_transporte.id = empresa_tipo_transporte.id_tipo_transporte
 							where viagem_cliente.id_viagem = ".$viagem."
 								order by numero_transporte, cliente.cliente";
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar rooming list de uma viagem
 	function buscar_rooming($viagem) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem_rooming_list.*, group_concat(viagem_cliente.id_cliente) as clientes,
 				group_concat(cliente.cliente) as nome_clientes, acomodacao.acomodacao
@@ -252,14 +237,13 @@ class viagem {
 						left join acomodacao on acomodacao.id = viagem_rooming_list.id_acomodacao
 							where viagem_rooming_list.id_viagem = ".$viagem."
 								group by viagem_rooming_list.id";
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar rooming list de um hotel
 	function buscar_rooming_hotel($hotel) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 	
 		$sql = "select viagem_rooming_list.*, group_concat(viagem_cliente.id_cliente) as clientes,
 				group_concat(cliente.cliente) as nome_clientes, acomodacao.acomodacao
@@ -273,14 +257,13 @@ class viagem {
             			and viagem_hotel.id_viagem = viagem_rooming_list.id_viagem
 							where viagem_rooming_hotel.id_hotel_viagem = ".$hotel."
 								group by viagem_rooming_list.id";
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	//buscar hoteis de uma rooming list
 	function buscar_hoteis_rooming($viagem,$indice_rooming) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select group_concat(viagem_rooming_hotel.id_hotel_viagem) as hoteis,
 				group_concat(concat(hotel.hotel,' (',date_format(viagem_hotel.data_chegada,'%d/%m/%Y'),')') separator ', ') as nome_hoteis
@@ -289,13 +272,12 @@ class viagem {
 						inner join hotel on hotel.id = viagem_hotel.id_hotel
 							where viagem_hotel.id_viagem = ".$viagem."
 							and viagem_rooming_hotel.indice_rooming_list = ".$indice_rooming;
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql);
 	}
 	
 	function alterar($valores) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		require_once('controles/funcoes.php');
 	
 		$empresas_clientes = array();
@@ -307,36 +289,43 @@ class viagem {
 		$conexao -> begin();
 
 		//informacoes principais
-		$sql = "update viagem set
-				viagem = '".campo_sql($valores['nome_viagem'])."',
-				data_saida = '".data_sql($valores['data_saida_viagem'])."',
-				valor = '".str_replace(",",".",campo_sql($valores['valor_viagem']))."'
-					where id = ".$valores['id_viagem'];
-		$conexao -> query($sql);
 		$id_viagem = $valores['id_viagem'];
+		$dados = [
+			'viagem' => campo_sql($valores['nome_viagem']),
+			'data_saida' => data_sql($valores['data_saida_viagem']),
+			'valor' => str_replace(",",".",campo_sql($valores['valor_viagem'])),
+			'id_viagem' => $id_viagem
+		];
+
+		$sql = "update viagem set
+				viagem = :viagem
+				data_saida = :data_saida
+				valor = :valor
+					where id = :id_viagem";
+		$conexao -> execute($sql, $dados);		
 		
 		//excluir destinos
 		if ($valores['excluir_destinos'] != '') {
 			$sql = "delete from viagem_destinos where id in (";
-			$excluir_destinos = explode("|",$valores['excluir_destinos']);
+			$excluir_destinos = explode("|", $valores['excluir_destinos']);
 			foreach ($excluir_destinos as $exc) {
 				if ($exc != '') {
 					$sql .= $exc.",";
 				}
 			}
-			$conexao -> query(substr($sql,0,-1).")");
+			$conexao -> execute(substr($sql,0,-1).")");
 		}
 		
 		//atualizar destinos
 		if ($valores['lista_destinos'] != '') {
-			$destinos = explode("|",$valores['lista_destinos']);
+			$destinos = explode("|", $valores['lista_destinos']);
 			foreach ($destinos as $i => $destino) {
 				if ($destino != '') {
 					//incluir se o destino nao existir no banco
 					if ($valores['destino_'.$i] == '') {
 						$sql = "insert into viagem_destinos (id_viagem, id_cidade) values ";
 						$sql .= "(".$id_viagem.", ".$destino.")";
-						$conexao -> query($sql);
+						$conexao -> execute($sql);
 					}
 				}
 			}
@@ -355,36 +344,55 @@ class viagem {
 					$ids .= $exc.",";
 				}
 			}
-			$conexao -> query($sql_clientes.substr($ids,0,-1).")");
-			$conexao -> query($sql_sinais.substr($ids,0,-1).")");
-			$conexao -> query($sql_transporte.substr($ids,0,-1).")");
+			$conexao -> execute($sql_clientes.substr($ids,0,-1).")");
+			$conexao -> execute($sql_sinais.substr($ids,0,-1).")");
+			$conexao -> execute($sql_transporte.substr($ids,0,-1).")");
 		}
 		
 		//atualizar transportes
 		if ($valores['lista_transportes'] != '') {
 			$transportes = explode("|",$valores['lista_transportes']);
 			foreach ($transportes as $i => $transporte) {
+				$valor = str_replace(",",".",campo_sql($valores['valor_transporte_'.$i]));
+				if (empty($valor)) {
+					$valor = 'null';
+				}
 				if ($transporte != '') {
-					$t = explode(",",$transporte);
+					$t = explode(",", $transporte);
 					//incluir se o transporte nao existir no banco
 					if ($valores['transporte_'.$i] == '') {
+						$dados = [
+							'quantidade' => campo_sql($valores['quantidade_transporte_'.$i]),
+							'contato' => campo_sql($valores['contato_transporte_'.$i]),
+							'valor' => nao_obrigatorio_sql(str_replace(",",".",campo_sql($valores['valor_transporte_'.$i]))),
+							'id_viagem' => $id_viagem,
+							'id_empresa_tipo_transporte' => $t[2]
+						];
 						$sql = "insert into viagem_transporte (quantidade, contato, valor, id_viagem, id_empresa_tipo_transporte) values ";
-						$sql .= "('".campo_sql($valores['quantidade_transporte_'.$i])."', '".campo_sql($valores['contato_transporte_'.$i])."',
-								'".campo_sql($valores['valor_transporte_'.$i])."',".$id_viagem.", ".$t[2].")";
-						$conexao -> query($sql);
-						$empresas_clientes[$t[2]] = mysql_insert_id();
-						$empresas_viagem[$i] = mysql_insert_id();
+						$sql .= "(:quantidade, :contato, :valor, :id_viagem, :id_empresa_tipo_transporte)";
+						$conexao -> execute($sql, $dados);
+						$ultimo_id = $conexao -> lastInsertId();
+						$empresas_clientes[$t[2]] = $ultimo_id;
+						$empresas_viagem[$i] = $ultimo_id;
 					}
 					//atualizar se o transporte existir no banco
 					else {
+						$dados = [
+							'quantidade' => campo_sql($valores['quantidade_transporte_'.$i]),
+							'contato' => campo_sql($valores['contato_transporte_'.$i]),
+							'valor' => nao_obrigatorio_sql(str_replace(",",".",campo_sql($valores['valor_transporte_'.$i]))),
+							'id_viagem' => $id_viagem,
+							'id_empresa_tipo_transporte' => $t[2],
+							'id_transporte' => $valores['transporte_'.$i]
+						];
 						$sql = "update viagem_transporte set
-									quantidade = '".campo_sql($valores['quantidade_transporte_'.$i])."',
-									contato = '".campo_sql($valores['contato_transporte_'.$i])."',
-									valor = '".campo_sql($valores['valor_transporte_'.$i])."',
-									id_viagem = ".$id_viagem.",
-									id_empresa_tipo_transporte = ".$t[2]."
-										where id = ".$valores['transporte_'.$i];
-						$conexao -> query($sql);
+									quantidade = :quantidade,
+									contato = :contato,
+									valor = :valor,
+									id_viagem = :id_viagem,
+									id_empresa_tipo_transporte = :id_empresa_tipo_transporte
+										where id = :id_transporte";
+						$conexao -> execute($sql, $dados);
 						$empresas_clientes[$t[2]] = $valores['transporte_'.$i];
 						$empresas_viagem[$i] = $valores['transporte_'.$i];
 					}
@@ -401,8 +409,7 @@ class viagem {
 					$sql .= $excluir_sinal.",";
 				}
 			}
-			$conexao -> query(substr($sql,0,-1).")");
-			echo substr($sql,0,-1).")";
+			$conexao -> execute(substr($sql,0,-1).")");
 		}
 		
 		//incluir sinais transportes
@@ -416,7 +423,7 @@ class viagem {
 						if ($valores['sinal_transporte_'.$i] == '') {
 							$sql = "insert into viagem_transporte_sinal (data, valor, id_viagem_transporte) values ";
 							$sql .= "('".data_sql($s[1])."', '".campo_sql($s[2])."', ".$empresas_viagem[$s[0]].")";
-							$conexao -> query($sql);
+							$conexao -> execute($sql);
 						}
 					}
 				}
@@ -434,8 +441,8 @@ class viagem {
 					$ids .= $exc.",";
 				}
 			}
-			$conexao -> query($sql_sinais.substr($ids,0,-1).")");
-			$conexao -> query($sql_restaurante.substr($ids,0,-1).")");
+			$conexao -> execute($sql_sinais.substr($ids,0,-1).")");
+			$conexao -> execute($sql_restaurante.substr($ids,0,-1).")");
 		}
 		
 		//atualizar restaurantes
@@ -518,13 +525,17 @@ class viagem {
 		if ($valores['lista_hoteis'] != '') {
 			$hoteis = explode("|",$valores['lista_hoteis']);
 			foreach ($hoteis as $i => $hotel) {
+				$valor = str_replace(",",".",campo_sql($valores['valor_hotel_'.$i]));
+				if (empty($valor)) {
+					$valor = 'null';
+				}
 				if ($hotel != '') {
 					//incluir se o hotel nao existir no banco
 					if ($valores['hotel_'.$i] == '') {
 						$sql = "insert into viagem_hotel (data_chegada, hora, data_saida, contato, valor, id_viagem, id_hotel) values ";
 						$sql .= "('".data_sql($valores['chegada_hotel_'.$i])."', '".campo_sql($valores['hora_hotel_'.$i])."',
 								'".data_sql($valores['saida_hotel_'.$i])."','".campo_sql($valores['contato_hotel_'.$i])."',
-								'".campo_sql($valores['valor_hotel_'.$i])."',".$id_viagem.", ".$hotel.")";					
+								".$valor.",".$id_viagem.", ".$hotel.")";					
 						$conexao -> query($sql);
 						$hoteis_viagem[$i] = mysql_insert_id();
 					}
@@ -535,7 +546,7 @@ class viagem {
 									hora = '".campo_sql($valores['hora_hotel_'.$i])."',
 									data_saida = '".data_sql($valores['saida_hotel_'.$i])."',
 									contato = '".campo_sql($valores['contato_hotel_'.$i])."',
-									valor = '".campo_sql($valores['valor_hotel_'.$i])."',
+									valor = ".$valor."
 									id_viagem = ".$id_viagem."
 										where id = ".$valores['hotel_'.$i];
 						$conexao -> query($sql);
@@ -726,8 +737,8 @@ class viagem {
 	}
 	
 	function cadastrar($valores) {
-		require_once('conexao.class.php');
-		$conexao = new conexao();
+		require_once('database.class.php');
+		$conexao = new database();
 		require_once('controles/funcoes.php');
 		
 		$empresas_clientes = array();
@@ -740,7 +751,7 @@ class viagem {
 		
 		//informacoes principais
 		$sql = "insert into viagem (viagem, data_saida, valor) values ";
-		$sql .= "('".campo_sql($valores['nome_viagem'])."','".data_sql($valores['data_saida_viagem'])."','".campo_sql($valores['valor_viagem'])."')";
+		$sql .= "('".campo_sql($valores['nome_viagem'])."','".data_sql($valores['data_saida_viagem'])."','".campo_sql(str_replace(",",".",$valores['valor_viagem']))."')";
 		$conexao -> query($sql);
 		$id_viagem = mysql_insert_id();
 		
@@ -761,10 +772,14 @@ class viagem {
 			$transportes = explode("|",$valores['lista_transportes']);
 			foreach ($transportes as $i => $transporte) {
 				if ($transporte != '') {
+					$val = $valores['valor_transporte_'.$i];
+					if (empty($val)) {
+						$val = 0;
+					}
 					$t = explode(",",$transporte);
 					$sql = "insert into viagem_transporte (quantidade, contato, valor, id_viagem, id_empresa_tipo_transporte) values ";
 					$sql .= "('".campo_sql($valores['quantidade_transporte_'.$i])."', '".campo_sql($valores['contato_transporte_'.$i])."',
-							'".campo_sql($valores['valor_transporte_'.$i])."',".$id_viagem.", ".$t[2].")";
+							'".campo_sql($val)."',".$id_viagem.", ".$t[2].")";
 					$conexao -> query($sql);
 					$empresas_clientes[$t[2]] = mysql_insert_id();
 					$empresas_viagem[$i] = mysql_insert_id();
@@ -912,8 +927,8 @@ class viagem {
 	}
 	
 	function lista_etiquetas($valores) {
-		require_once ('conexao.class.php');
-		$conexao = new conexao();
+		require_once ('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select cliente.cliente, viagem_rooming_list.apto,
 				hotel.hotel, cidade.cidade, estado.sigla,
@@ -936,8 +951,8 @@ class viagem {
 	}
 	
 	function lista_seguro($viagem) {
-		require_once ('conexao.class.php');
-		$conexao = new conexao();
+		require_once ('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select cliente.cliente, if (cliente.cpf='',if(titular.cpf='','',concat(titular.cpf,' (Resp.)')),cliente.cpf) as cpf,
 				date_format(cliente.data_nascimento,'%d/%m/%Y') as data_nascimento, empresa.empresa,
@@ -956,8 +971,8 @@ class viagem {
 	}
 	
 	function lista_transportes($viagem) {
-		require_once ('conexao.class.php');
-		$conexao = new conexao();
+		require_once ('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select viagem_transporte.id, viagem_transporte.quantidade, empresa.empresa
 					from viagem_transporte
@@ -969,8 +984,8 @@ class viagem {
 	}
 	
 	function passageiros_pontos($transporte,$numero) {
-		require_once ('conexao.class.php');
-		$conexao = new conexao();
+		require_once ('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select viagem_cliente.*, group_concat(concat(cliente.cliente,'|',poltrona)) as clientes,
 				concat(ponto_embarque.bairro,' - ',ponto_embarque.local) as ponto
@@ -984,8 +999,8 @@ class viagem {
 	}
 	
 	function rooming_list($viagem) {
-		require_once ('conexao.class.php');
-		$conexao = new conexao();
+		require_once ('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select viagem_rooming_list.*, group_concat(cliente.cliente separator ' / ')  as clientes,
 				acomodacao.acomodacao
@@ -1000,8 +1015,8 @@ class viagem {
 	}
 
 	function lista_passageiros($viagem) {
-		require_once ('conexao.class.php');
-		$conexao = new conexao();
+		require_once ('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select cliente, rg, sigla, empresa.empresa, viagem_cliente.numero_transporte,
 				tipo_transporte.tipo_transporte
@@ -1018,8 +1033,8 @@ class viagem {
 	}
 	
 	function contatos_passageiros($viagem) {
-		require_once ('conexao.class.php');
-		$conexao = new conexao();
+		require_once ('database.class.php');
+		$conexao = new database();
 		
 		$sql = "select cliente, group_concat(cliente_telefones.telefone separator ', ') as telefones, numero_transporte
 					from cliente
