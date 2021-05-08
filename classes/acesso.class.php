@@ -51,7 +51,7 @@ class acesso {
 					from menu
 						inner join pagina on pagina.id_menu = menu.id
 						group by menu.id
-							order by menu.ordem, pagina.ordem";
+							-- order by menu.ordem, pagina.ordem";
 		$r = $conexao -> query($sql);
 		
 		return $r;

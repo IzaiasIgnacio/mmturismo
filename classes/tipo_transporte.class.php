@@ -7,7 +7,7 @@ class tipo_transporte {
 		
 		$sql = "select id, tipo_transporte
 					from tipo_transporte
-						order by tipo_transporte";
+						-- order by tipo_transporte";
 		$r = $conexao -> query($sql);
 		
 		return $r;

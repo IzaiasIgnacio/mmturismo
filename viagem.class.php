@@ -116,7 +116,7 @@ class viagem {
 		$sql = "select viagem.id, viagem.viagem, date_format(data_saida,'%d/%m/%Y') as data_saida
 					from viagem
 						where viagem like '%".utf8_decode($nome)."%'
-							order by viagem
+							-- order by viagem
 								limit 10";
 		$r = $conexao -> query($sql);
 		return $r;
@@ -130,7 +130,7 @@ class viagem {
 		$sql = "select *
 					from viagem_".$tipo."_sinal
 						where id_viagem_".$tipo." = ".$id."
-							order by data desc";
+							-- order by data desc";
 		$r = $conexao -> query($sql);
 		return $r;
 	}
@@ -233,7 +233,7 @@ class viagem {
 						left join empresa on empresa.id = empresa_tipo_transporte.id_empresa
 						left join tipo_transporte on tipo_transporte.id = empresa_tipo_transporte.id_tipo_transporte
 							where viagem_cliente.id_viagem = ".$viagem."
-								order by numero_transporte, cliente.cliente";
+								-- order by numero_transporte, cliente.cliente";
 		$r = $conexao -> query($sql);
 		return $r;
 	}
@@ -951,7 +951,7 @@ class viagem {
 						left join cliente_dependentes on cliente.id = cliente_dependentes.id_dependente
     					left join cliente titular on titular.id = cliente_dependentes.id_titular
 							where viagem_cliente.id_viagem = ".$viagem."
-								order by cliente.cliente";
+								-- order by cliente.cliente";
 		return $conexao -> query($sql);
 	}
 	
@@ -1013,7 +1013,7 @@ class viagem {
 			            inner join tipo_transporte on tipo_transporte.id = empresa_tipo_transporte.id_tipo_transporte
 						left join orgao_emissor on orgao_emissor.id = cliente.id_orgao_emissor
 							where viagem_cliente.id_viagem = ".$viagem."
-								order by cliente.cliente";
+								-- order by cliente.cliente";
 		return $conexao -> query($sql);
 	}
 	
@@ -1027,7 +1027,7 @@ class viagem {
 						left join cliente_telefones on cliente_telefones.id_cliente = cliente.id
 							where viagem_cliente.id_viagem = ".$viagem."
 								group by cliente.id
-									order by cliente";
+									-- order by cliente";
 		
 		return $conexao -> query($sql);
 	}

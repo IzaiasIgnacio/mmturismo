@@ -7,7 +7,7 @@ class estado {
 		
 		$sql = "select id, sigla
 					from estado
-						order by sigla";
+						-- order by sigla";
 		$r = $conexao -> query($sql);
 		
 		return $r;

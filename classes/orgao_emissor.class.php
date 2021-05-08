@@ -54,7 +54,7 @@ class orgao_emissor {
 		
 		$sql = "select id, sigla, orgao_emissor
 					from orgao_emissor
-						order by sigla";
+						-- order by sigla";
 		$r = $conexao -> query($sql);
 		
 		return $r;

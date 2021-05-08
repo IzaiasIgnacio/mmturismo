@@ -75,7 +75,7 @@ class cliente {
     					inner join viagem_cliente on viagem_cliente.id_viagem = viagem.id
       						where viagem_cliente.id_cliente = ".$valores['cliente']."
 							".$comp."
-      							order by data_saida desc
+								-- order by data_saida desc
       								limit ".$valores['inicio'].",10";
 		$this->lista = $conexao -> query($sql);
 		
@@ -121,7 +121,7 @@ class cliente {
 					from cliente
 						left join cliente_telefones on cliente_telefones.id_cliente = cliente.id and cliente_telefones.principal = 1
 							where cliente like '".utf8_decode($nome)."%'
-								order by cliente
+								-- order by cliente
 									limit 15";
 		$r = $conexao -> query($sql);
 		return $r;
@@ -137,7 +137,7 @@ class cliente {
 						left join cliente_telefones on cliente_telefones.id_cliente = cliente.id and cliente_telefones.principal = 1
 							where cliente like '".$nome."%'
 							and cliente.id_situacao = 1
-								order by cliente
+								-- order by cliente
 									limit 10";
 		$r = $conexao -> query($sql);
 		return $r;
@@ -153,7 +153,7 @@ class cliente {
 					from cliente_telefones
 						inner join tipo_telefone on cliente_telefones.id_tipo = tipo_telefone.id
 							where cliente_telefones.id_cliente = ".$cliente."
-								order by principal desc, tipo_telefone";
+								-- order by principal desc, tipo_telefone";
 		$r = $conexao -> query($sql);
 		return $r;
 	}
@@ -426,7 +426,7 @@ class cliente {
 						inner join estado on cidade.id_estado = estado.id
 							where id_situacao = 1
 							and cliente_dependentes.id_dependente is null
-								order by cliente.cliente";
+								-- order by cliente.cliente";
 		$r = $conexao -> query($sql);
 		return $r;
 	}
@@ -439,7 +439,7 @@ class cliente {
 					from cliente
 				    	left join viagem_cliente on viagem_cliente.id_cliente = cliente.id
 				      		group by cliente.id
-				        		order by cliente.cliente";
+								-- order by cliente.cliente";
 		$r = $conexao -> query($sql);
 		return $r;
 	}
@@ -452,7 +452,7 @@ class cliente {
 					from cliente
 						left join cliente_telefones on cliente.id = id_cliente
 							group by cliente.id
-								order by cliente";
+								-- order by cliente";
 		$r = $conexao -> query($sql);
 		return $r;
 	}

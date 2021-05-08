@@ -39,7 +39,7 @@ class hotel {
     					inner join viagem on viagem_hotel.id_viagem = viagem.id
       						where viagem_hotel.id_hotel = ".$valores['hotel']."
 							".$comp."
-      							order by data_chegada desc
+								-- order by data_chegada desc
       								limit ".$valores['inicio'].",10";
 		$this->lista = $conexao -> query($sql);
 	
@@ -55,7 +55,7 @@ class hotel {
 		$sql = "select hotel.id, hotel.hotel
 					from hotel
 						where id_cidade = ".$cidade."
-							order by hotel";
+							-- order by hotel";
 		$r = $conexao -> query($sql);
 		return $r;
 	}
@@ -68,7 +68,7 @@ class hotel {
 		$sql = "select hotel.id, hotel.hotel
 					from hotel
 						where hotel like '%".utf8_decode($nome)."%'
-							order by hotel
+							-- order by hotel
 								limit 10";
 		$r = $conexao -> query($sql);
 		return $r;

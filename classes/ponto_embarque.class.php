@@ -55,7 +55,7 @@ class ponto_embarque {
 		$sql = "select ponto_embarque.*, cidade.cidade, concat(bairro,' - ',local) as ponto
 					from ponto_embarque
 						inner join cidade on cidade.id = ponto_embarque.id_cidade
-							order by cidade, bairro, local";
+							-- order by cidade, bairro, local";
 		$r = $conexao -> query($sql);
 		return $r;
 	}

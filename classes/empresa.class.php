@@ -42,7 +42,7 @@ class empresa {
 						inner join empresa_tipo_transporte on empresa_tipo_transporte.id = viagem_transporte.id_empresa_tipo_transporte
       						where empresa_tipo_transporte.id_empresa = ".$valores['empresa']."
 							".$comp."
-      							order by data_saida desc
+								-- order by data_saida desc
       								limit ".$valores['inicio'].",10";
 		$this->lista = $conexao -> query($sql);
 	
@@ -58,7 +58,7 @@ class empresa {
 		$sql = "select empresa.id, empresa.empresa
 					from empresa
 						where empresa like '%".utf8_decode($nome)."%'
-							order by empresa
+							-- order by empresa
 								limit 10";
 		$r = $conexao -> query($sql);
 		return $r;
@@ -73,7 +73,7 @@ class empresa {
 					from empresa
 						inner join empresa_tipo_transporte on empresa_tipo_transporte.id_empresa = empresa.id
 							where empresa_tipo_transporte.id_tipo_transporte = ".$tipo."
-									order by empresa";
+								-- order by empresa";
 		$r = $conexao -> query($sql);
 		return $r;
 	}

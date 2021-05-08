@@ -8,7 +8,7 @@ class cidade {
 		$sql = "select id, cidade
 					from cidade
 						where id_estado = ".$estado."
-							order by cidade";
+							-- order by cidade";
 		$r = $conexao -> query($sql);
 		
 		return $r;
