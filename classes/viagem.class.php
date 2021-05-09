@@ -152,7 +152,7 @@ class viagem {
 						inner join tipo_transporte on tipo_transporte.id = empresa_tipo_transporte.id_tipo_transporte
 						inner join empresa on empresa.id = empresa_tipo_transporte.id_empresa
 							where viagem_transporte.id_viagem = ".$viagem;
-		return= $conexao -> query($sql);
+		return $conexao -> query($sql);
 	}
 	
 	//buscar bairros de uma viagem
@@ -451,24 +451,32 @@ class viagem {
 			foreach ($restaurantes as $i => $restaurante) {
 				if ($restaurante != '') {
 					//incluir se o restaurante nao existir no banco
+					$dados = [
+						'data' => data_sql($valores['data_restaurante_'.$i]),
+						'hora' => campo_sql($valores['hora_restaurante_'.$i]),
+						'contato' => campo_sql($valores['contato_restaurante_'.$i]),
+						'valor' => campo_sql($valores['valor_restaurante_'.$i]),
+						'id_viagem' => $id_viagem,
+						'id_restaurante' => $valores['restaurante_'.$i]
+					];
+
 					if ($valores['restaurante_'.$i] == '') {
+						$dados['id_restaurante'] = $restaurante;
 						$sql = "insert into viagem_restaurante (data, hora, contato, valor, id_viagem, id_restaurante) values ";
-						$sql .= "('".data_sql($valores['data_restaurante_'.$i])."', '".campo_sql($valores['hora_restaurante_'.$i])."',
-								'".campo_sql($valores['contato_restaurante_'.$i])."','".campo_sql($valores['valor_restaurante_'.$i])."',
-								".$id_viagem.", ".$restaurante.")";					
-						$conexao -> query($sql);
-						$restaurantes_viagem[$i] = mysql_insert_id();
+						$sql .= "(:data, :hora, :contato, :valor, :id_viagem, :id_restaurante)";
+						$conexao -> execute($sql, $dados);
+						$restaurantes_viagem[$i] = $conexao -> lastInsertId();
 					}
 					//atualizar se o restaurante existir no banco
 					else {
 						$sql = "update viagem_restaurante set
-									data = '".data_sql($valores['data_restaurante_'.$i])."',
-									hora = '".campo_sql($valores['hora_restaurante_'.$i])."',
-									contato = '".campo_sql($valores['contato_restaurante_'.$i])."',
-									valor = '".campo_sql($valores['valor_restaurante_'.$i])."',
-									id_viagem = ".$id_viagem."
-										where id = ".$valores['restaurante_'.$i];
-						$conexao -> query($sql);
+									data = :data,
+									hora = :hora,
+									contato = :contato,
+									valor = :valor,
+									id_viagem = :id_viagem
+										where id = :id_restaurante";
+						$conexao -> execute($sql, $dados);
 						$restaurantes_viagem[$i] = $valores['restaurante_'.$i];
 					}
 				}
@@ -484,8 +492,7 @@ class viagem {
 					$sql .= $excluir_sinal.",";
 				}
 			}
-			$conexao -> query(substr($sql,0,-1).")");
-			echo substr($sql,0,-1).")";
+			$conexao -> execute(substr($sql,0,-1).")");
 		}
 		
 		//incluir sinais restaurante
@@ -499,7 +506,7 @@ class viagem {
 						if ($valores['sinal_restaurante_'.$i] == '') {
 							$sql = "insert into viagem_restaurante_sinal (data, valor, id_viagem_restaurante) values ";
 							$sql .= "('".data_sql($s[1])."', '".campo_sql($s[2])."', ".$restaurantes_viagem[$s[0]].")";
-							$conexao -> query($sql);
+							$conexao -> execute($sql);
 						}
 					}
 				}
@@ -517,8 +524,8 @@ class viagem {
 					$ids .= $exc.",";
 				}
 			}
-			$conexao -> query($sql_sinais.substr($ids,0,-1).")");
-			$conexao -> query($sql_hotel.substr($ids,0,-1).")");
+			$conexao -> execute($sql_sinais.substr($ids,0,-1).")");
+			$conexao -> execute($sql_hotel.substr($ids,0,-1).")");
 		}
 		
 		//atualizar hoteis
@@ -530,26 +537,34 @@ class viagem {
 					$valor = 'null';
 				}
 				if ($hotel != '') {
+					$dados = [
+						'data_chegada' => data_sql($valores['chegada_hotel_'.$i]),
+						'hora' => campo_sql($valores['hora_hotel_'.$i]),
+						'data_saida' => data_sql($valores['saida_hotel_'.$i]),
+						'contato' => campo_sql($valores['contato_hotel_'.$i]),
+						'valor' => $valor,
+						'id_viagem' => $id_viagem,
+						'id_hotel' => $valores['hotel_'.$i]
+					];
 					//incluir se o hotel nao existir no banco
 					if ($valores['hotel_'.$i] == '') {
+						$dados['id_hotel'] = $hotel;
 						$sql = "insert into viagem_hotel (data_chegada, hora, data_saida, contato, valor, id_viagem, id_hotel) values ";
-						$sql .= "('".data_sql($valores['chegada_hotel_'.$i])."', '".campo_sql($valores['hora_hotel_'.$i])."',
-								'".data_sql($valores['saida_hotel_'.$i])."','".campo_sql($valores['contato_hotel_'.$i])."',
-								".$valor.",".$id_viagem.", ".$hotel.")";					
-						$conexao -> query($sql);
-						$hoteis_viagem[$i] = mysql_insert_id();
+						$sql .= "(:data_chegada, :hora, :data_saida, :contato, :valor, :id_viagem, :id_hotel)";
+						$conexao -> execute($sql, $dados);
+						$hoteis_viagem[$i] = $conexao -> lastInsertId();
 					}
 					//atualizar se o hotel existir no banco
 					else {
 						$sql = "update viagem_hotel set
-									data_chegada = '".data_sql($valores['chegada_hotel_'.$i])."',
-									hora = '".campo_sql($valores['hora_hotel_'.$i])."',
-									data_saida = '".data_sql($valores['saida_hotel_'.$i])."',
-									contato = '".campo_sql($valores['contato_hotel_'.$i])."',
-									valor = ".$valor."
-									id_viagem = ".$id_viagem."
-										where id = ".$valores['hotel_'.$i];
-						$conexao -> query($sql);
+									data_chegada = :data_chegada,
+									hora = :hora,
+									data_saida = :data_saida,
+									contato = :contato,
+									valor = :valor,
+									id_viagem = :id_viagem
+										where id = :id_hotel";
+						$conexao -> execute($sql, $dados);
 						$hoteis_viagem[$i] = $valores['hotel_'.$i];
 					}
 				}
@@ -565,8 +580,7 @@ class viagem {
 					$sql .= $excluir_sinal.",";
 				}
 			}
-			$conexao -> query(substr($sql,0,-1).")");
-			echo substr($sql,0,-1).")";
+			$conexao -> execute(substr($sql,0,-1).")");
 		}
 		
 		//incluir sinais hoteis
@@ -580,7 +594,7 @@ class viagem {
 						if ($valores['sinal_hotel_'.$i] == '') {
 							$sql = "insert into viagem_hotel_sinal (data, valor, id_viagem_hotel) values ";
 							$sql .= "('".data_sql($s[1])."', '".campo_sql($s[2])."', ".$hoteis_viagem[$s[0]].")";
-							$conexao -> query($sql);
+							$conexao -> execute($sql);
 						}
 					}
 				}
@@ -598,8 +612,8 @@ class viagem {
 					$ids .= $exc.",";
 				}
 			}
-			$conexao -> query($sql_rooming.substr($ids,0,-1).")");
-			$conexao -> query($sql_cliente.substr($ids,0,-1).")");
+			$conexao -> execute($sql_rooming.substr($ids,0,-1).")");
+			$conexao -> execute($sql_cliente.substr($ids,0,-1).")");
 		}
 		
 		//incluir clientes
@@ -610,28 +624,44 @@ class viagem {
 					//incluir se o cliente nao existir no banco
 					if ($valores['valor_cliente_'.$i] == '') {
 						$c = explode(",",$cliente);
+						$dados = [
+							'hora_embarque' => campo_sql($valores['embarque_'.$c[0]]),
+							'numero_transporte' => campo_sql($valores['numero_transporte_'.$c[0]]),
+							'poltrona' => campo_sql($valores['poltrona_'.$c[0]]),
+							'id_viagem' => $id_viagem,
+							'id_cliente' => $c[0],
+							'id_transporte_viagem' => nao_obrigatorio_sql($empresas_clientes[$valores['transporte_'.$c[0]]]),
+							'id_ponto_embarque' => nao_obrigatorio_sql($valores['ponto_'.$c[0]])
+						];
 						$sql = "insert into viagem_cliente (hora_embarque, numero_transporte, poltrona,
 								id_viagem, id_cliente, id_transporte_viagem, id_ponto_embarque) values ";
-						$sql .= "('".campo_sql($valores['embarque_'.$c[0]])."', '".campo_sql($valores['numero_transporte_'.$c[0]])."',
-								'".campo_sql($valores['poltrona_'.$c[0]])."', ".$id_viagem.",
-								".$c[0].",nao_obrigatorio('".$empresas_clientes[$valores['transporte_'.$c[0]]]."'),
-								nao_obrigatorio('".$valores['ponto_'.$c[0]]."'))";
-						$conexao -> query($sql);
-						$clientes_viagem[$c[0]] = mysql_insert_id();
+						$sql .= "(:hora_embarque, :numero_transporte, :poltrona,
+								id_viagem, :id_cliente, :id_transporte_viagem, :id_ponto_embarque)";
+						$conexao -> execute($sql, $dados);
+						$clientes_viagem[$c[0]] = $conexao -> lastInsertId();
 					}
 					//atualizar se o cliente existir no banco
 					else {
+						$dados = [
+							'hora_embarque' => campo_sql($valores['embarque_'.$viagem_cliente]),
+							'numero_transporte' => campo_sql($valores['numero_transporte_'.$viagem_cliente]),
+							'poltrona' => campo_sql($valores['poltrona_'.$viagem_cliente]),
+							'id_viagem' => $id_viagem,
+							'id_cliente' => $valores['valor_cliente_'.$i],
+							'id_transporte_viagem' => nao_obrigatorio_sql($empresas_clientes[$valores['transporte_'.$viagem_cliente]]),
+							'id_ponto_embarque' => nao_obrigatorio_sql($valores['ponto_'.$viagem_cliente])
+						];
 						$viagem_cliente = $valores['viagem_cliente_'.$i];
 						$sql = "update viagem_cliente set
-								hora_embarque = '".campo_sql($valores['embarque_'.$viagem_cliente])."',
-								numero_transporte = '".campo_sql($valores['numero_transporte_'.$viagem_cliente])."',
-								poltrona = '".campo_sql($valores['poltrona_'.$viagem_cliente])."',
-								id_viagem = ".$id_viagem.",
-								id_cliente = ".$valores['valor_cliente_'.$i].",
-								id_transporte_viagem = nao_obrigatorio('".$empresas_clientes[$valores['transporte_'.$viagem_cliente]]."'),
-								id_ponto_embarque = nao_obrigatorio('".$valores['ponto_'.$viagem_cliente]."')
+								hora_embarque = :hora_embarque,
+								numero_transporte = :numero_transporte,
+								poltrona = :poltrona,
+								id_viagem = :id_viagem,
+								id_cliente = :id_cliente,
+								id_transporte_viagem = :id_transporte_viagem,
+								id_ponto_embarque = :id_ponto_embarque,
 									where id = ".$valores['viagem_cliente_'.$i];
-						$conexao -> query($sql);
+						$conexao -> execute($sql, $dados);
 						$clientes_viagem[$valores['valor_cliente_'.$i]] = $valores['viagem_cliente_'.$i];
 					}
 				}
