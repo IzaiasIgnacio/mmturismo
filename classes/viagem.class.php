@@ -451,17 +451,15 @@ class viagem {
 			foreach ($restaurantes as $i => $restaurante) {
 				if ($restaurante != '') {
 					//incluir se o restaurante nao existir no banco
-					$dados = [
-						'data' => data_sql($valores['data_restaurante_'.$i]),
-						'hora' => campo_sql($valores['hora_restaurante_'.$i]),
-						'contato' => campo_sql($valores['contato_restaurante_'.$i]),
-						'valor' => campo_sql($valores['valor_restaurante_'.$i]),
-						'id_viagem' => $id_viagem,
-						'id_restaurante' => $valores['restaurante_'.$i]
-					];
-
 					if ($valores['restaurante_'.$i] == '') {
-						$dados['id_restaurante'] = $restaurante;
+						$dados = [
+							'data' => data_sql($valores['data_restaurante_'.$i]),
+							'hora' => campo_sql($valores['hora_restaurante_'.$i]),
+							'contato' => campo_sql($valores['contato_restaurante_'.$i]),
+							'valor' => campo_sql($valores['valor_restaurante_'.$i]),
+							'id_viagem' => $id_viagem,
+							'id_restaurante' => $restaurante
+						];
 						$sql = "insert into viagem_restaurante (data, hora, contato, valor, id_viagem, id_restaurante) values ";
 						$sql .= "(:data, :hora, :contato, :valor, :id_viagem, :id_restaurante)";
 						$conexao -> execute($sql, $dados);
@@ -469,6 +467,14 @@ class viagem {
 					}
 					//atualizar se o restaurante existir no banco
 					else {
+						$dados = [
+							'data' => data_sql($valores['data_restaurante_'.$i]),
+							'hora' => campo_sql($valores['hora_restaurante_'.$i]),
+							'contato' => campo_sql($valores['contato_restaurante_'.$i]),
+							'valor' => campo_sql($valores['valor_restaurante_'.$i]),
+							'id_viagem' => $id_viagem,
+							'id_restaurante' => $valores['restaurante_'.$i]
+						];
 						$sql = "update viagem_restaurante set
 									data = :data,
 									hora = :hora,
@@ -678,7 +684,7 @@ class viagem {
 					$ids .= $clientes_viagem[$exc].",";
 				}
 			}
-			$conexao -> query($sql.substr($ids,0,-1).")");
+			$conexao -> execute($sql.substr($ids,0,-1).")");
 		}
 		
 		//excluir rooming list
@@ -692,8 +698,8 @@ class viagem {
 					$ids .= $exc.",";
 				}
 			}
-			$conexao -> query($sql_cliente_rooming.substr($ids,0,-1).")");
-			$conexao -> query($sql_rooming.substr($ids,0,-1).")");
+			$conexao -> execute($sql_cliente_rooming.substr($ids,0,-1).")");
+			$conexao -> execute($sql_rooming.substr($ids,0,-1).")");
 		}
 		
 		//excluir hoteis da rooming list
@@ -701,7 +707,7 @@ class viagem {
 					from viagem_rooming_hotel
 						inner join viagem_hotel on viagem_hotel.id = viagem_rooming_hotel.id_hotel_viagem
 							where viagem_hotel.id_viagem = ".$id_viagem;
-		$conexao -> query($sql);
+		$conexao -> execute($sql);
 		
 		//rooming list
 		if ($valores['lista_rooming'] != '') {
@@ -722,8 +728,8 @@ class viagem {
 							$sql_rooming .= "('".campo_sql($valores['solteiro_'.$i."_".$l])."', '".campo_sql($valores['casal_'.$i."_".$l])."',
 											'".campo_sql($valores['apto_'.$i."_".$l])."', ".$i.",
 											nao_obrigatorio('".$valores['acomodacao_'.$i."_".$l]."'), ".$id_viagem.")";
-							$conexao -> query($sql_rooming);
-							$id_rooming = mysql_insert_id();
+							$conexao -> execute($sql_rooming);
+							$id_rooming = $conexao -> lastInsertId());
 						}
 						//se ja existe no banco, guardar id
 						else {
@@ -741,7 +747,7 @@ class viagem {
 										if ($valores['valor_cliente_rooming_'.$i.'_'.$l.'_'.$c] == '') {
 											$sql_cliente = "insert into viagem_cliente_rooming (id_viagem_cliente, id_viagem_rooming) values ";
 											$sql_cliente .= "(".$clientes_viagem[$r].", ".$id_rooming.")";
-											$conexao -> query($sql_cliente);
+											$conexao -> execute($sql_cliente);
 										}
 									}
 								}
@@ -756,7 +762,7 @@ class viagem {
 							$sql_hotel_rooming = "insert into viagem_rooming_hotel (id_hotel_viagem, indice_rooming_list) values ";
 							$sql_hotel_rooming .= "(".$hoteis_viagem[$h].", ".$i.") ";
 							$sql_hotel_rooming .= "on duplicate key update id = id";
-							$conexao -> query($sql_hotel_rooming);
+							$conexao -> execute($sql_hotel_rooming);
 						}
 					}
 				}
