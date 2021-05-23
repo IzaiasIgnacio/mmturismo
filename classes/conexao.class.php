@@ -2,7 +2,7 @@
 class conexao {
 	
 	function __construct() {
-		mysql_connect("localhost","cincommt_db","mmturismo42*");
+		mysql_connect("localhost","root","");
 		mysql_select_db("cincommt_db");
 	}
 	

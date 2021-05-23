@@ -72,7 +72,7 @@ controle_cliente('lista');
 					</tr>
 				</thead>
 				<tbody>
-					<?php while ($l = mysql_fetch_assoc($lista)) { ?>
+					<?php foreach ($lista as $l) { ?>
 					<tr class='linha'>
 						<input type="hidden" class="id" value="<?php echo $l['id']; ?>">
 						<td align="left" style="padding-left: 5px"><?php echo utf8_encode($l['cliente']); ?></td>

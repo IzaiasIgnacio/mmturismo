@@ -13,7 +13,7 @@ $viagem = new viagem();
 
 $clientes = $viagem -> buscar_clientes($_POST['id_viagem']);
 
-while ($cliente = mysql_fetch_assoc($clientes)) {
+foreach ($clientes as $cliente) {
 	$transportes_viagem[$cliente['numero_transporte']][] = $cliente;
 }
 

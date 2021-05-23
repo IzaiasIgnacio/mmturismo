@@ -11,86 +11,86 @@ class viagem {
 		//buscar ids viagem_restaurante
 		$sql = "select id from viagem_restaurante where id_viagem = ".$viagem;
 		$resultado = $conexao -> query($sql);
-		if (mysql_num_rows($resultado) > 0) {
-			while ($restaurante = mysql_fetch_assoc($resultado)) {
+		if (count($resultado) > 0) {
+			foreach ($resultado as $restaurante) {
 				$id_viagem_restaurante = $restaurante['id'];
 				
 				//viagem_restaurante_sinal
 				$sql = "delete from viagem_restaurante_sinal where id_viagem_restaurante = ".$id_viagem_restaurante;
-				$conexao -> query($sql);
+				$conexao -> execute($sql);
 			}
 		}
 
 		//viagem_restaurante
 		$sql = "delete from viagem_restaurante where id_viagem = ".$viagem;
-		$conexao -> query($sql);
+		$conexao -> execute($sql);
 
 		//buscar ids viagem_cliente
 		$sql = "select id from viagem_cliente where id_viagem = ".$viagem;
 		$resultado = $conexao -> query($sql);
-		if (mysql_num_rows($resultado) > 0) {
-			while ($viagem_cliente = mysql_fetch_assoc($resultado)) {
+		if (count($resultado) > 0) {
+			foreach ($resultado as $viagem_cliente) {
 				$id_viagem_cliente = $viagem_cliente['id'];
 				
 				//viagem_cliente_rooming
 				$sql = "delete from viagem_cliente_rooming where id_viagem_cliente = ".$id_viagem_cliente;
-				$conexao -> query($sql);
+				$conexao -> execute($sql);
 			}
 		}
 
 		//viagem_rooming_list
 		$sql = "delete from viagem_rooming_list where id_viagem = ".$viagem;
-		$conexao -> query($sql);
+		$conexao -> execute($sql);
 
 		//viagem_cliente
 		$sql = "delete from viagem_cliente where id_viagem = ".$viagem;
-		$conexao -> query($sql);
+		$conexao -> execute($sql);
 		
 		//buscar ids viagem_transporte
 		$sql = "select id from viagem_transporte where id_viagem = ".$viagem;
 		$resultado = $conexao -> query($sql);
-		if (mysql_num_rows($resultado) > 0) {
-			while ($transporte = mysql_fetch_assoc($resultado)) {
+		if (count($resultado) > 0) {
+			foreach ($resultado as $transporte) {
 				$id_viagem_transporte = $transporte['id'];
 				
 				//viagem_transporte_sinal
 				$sql = "delete from viagem_transporte_sinal where id_viagem_transporte = ".$id_viagem_transporte;
-				$conexao -> query($sql);
+				$conexao -> execute($sql);
 			}
 		}
 		
 		//viagem_transporte
 		$sql = "delete from viagem_transporte where id_viagem = ".$viagem;
-		$conexao -> query($sql);
+		$conexao -> execute($sql);
 
 		//buscar ids viagem_hotel
 		$sql = "select id from viagem_hotel where id_viagem = ".$viagem;
 		$resultado = $conexao -> query($sql);
-		if (mysql_num_rows($resultado) > 0) {
-			while ($hotel = mysql_fetch_assoc($resultado)) {
+		if (count($resultado) > 0) {
+			foreach ($resultado as $hotel) {
 				$id_viagem_hotel = $hotel['id'];
 				
 				//viagem_rooming_hotel
 				$sql = "delete from viagem_rooming_hotel where id_hotel_viagem = ".$id_viagem_hotel;
-				$conexao -> query($sql);
+				$conexao -> execute($sql);
 				
 				//viagem_hotel_sinal
 				$sql = "delete from viagem_hotel_sinal where id_viagem_hotel = ".$id_viagem_hotel;
-				$conexao -> query($sql);
+				$conexao -> execute($sql);
 			}
 		}
 
 		//viagem_hotel
 		$sql = "delete from viagem_hotel where id_viagem = ".$viagem;
-		$conexao -> query($sql);
+		$conexao -> execute($sql);
 
 		//destinos
 		$sql = "delete from viagem_destinos where id_viagem = ".$viagem;
-		$conexao -> query($sql);
+		$conexao -> execute($sql);
 
 		//viagem
 		$sql = "delete from viagem where id = ".$viagem;
-		$conexao -> query($sql);
+		$conexao -> execute($sql);
 		
 		$conexao -> commit();
 	}

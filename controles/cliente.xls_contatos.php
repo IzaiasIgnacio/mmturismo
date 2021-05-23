@@ -99,7 +99,7 @@ $planilha->setCellValue('I1', 'Telefones');
 $planilha->setCellValue('K1', 'E-mail');
 
 $atual = 2;
-while ($contato = mysql_fetch_assoc($contatos)) {
+foreach ($contatos as $contato) {
     $planilha->mergeCells('B'.$atual.':H'.$atual);
     $planilha->mergeCells('I'.$atual.':J'.$atual);
     $planilha->mergeCells('K'.$atual.':L'.$atual);
