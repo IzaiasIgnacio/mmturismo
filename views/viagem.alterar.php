@@ -1087,6 +1087,9 @@ controle_viagem('alterar');
 				function(resposta){
 					response($.map(resposta,
 					function(item) {
+						if (item.data_saida == null) {
+							item.data_saida = '';
+						}
 						return {
 							//valor para exibir na selecao
 							label: item.viagem+" "+item.data_saida,
@@ -1519,7 +1522,7 @@ controle_viagem('alterar');
 			<label class='label_campo'>Tipo: </label>
 			<select name='tipo_transporte' id='tipo_transporte'>
 				<option value=''>Selecione</option>
-				<?php while ($l = mysql_fetch_array($lista_tipo_transporte)) { ?>
+				<?php foreach ($lista_tipo_transporte as $l) { ?>
 				<option value='<?php echo $l['id']; ?>'><?php echo $l['tipo_transporte']; ?></option>
 				<?php } ?>
 			</select>

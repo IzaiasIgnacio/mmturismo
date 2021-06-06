@@ -24,15 +24,15 @@ function controle_viagem($acao) {
 			global $lista_ponto;
 			
 			$estados = $estado -> listar();
-			while ($l = mysql_fetch_array($estados)) {
+			foreach ($estados as $l) {
 				$lista_estado .= "<option value='".$l['id']."'>".$l['sigla']."</option>";
 			}
 			$acomodacoes = $acomodacao -> listar();
-			while ($l = mysql_fetch_array($acomodacoes)) {
+			foreach ($acomodacoes as $l) {
 				$lista_acomodacao .= "<option value='".$l['id']."'>".$l['acomodacao']."</option>";
 			}
 			$pontos = $ponto_embarque -> listar();
-			while ($l = mysql_fetch_array($pontos)) {
+			foreach ($pontos as $l) {
 				$lista_ponto .= "<option value='".$l['id']."'>".$l['ponto']."</option>";
 			}
 			$lista_tipo_transporte = $tipo_transporte -> listar();
@@ -60,15 +60,15 @@ function controle_viagem($acao) {
 			global $lista_ponto;
 			
 			$estados = $estado -> listar();
-			while ($l = mysql_fetch_array($estados)) {
+			foreach ($estados as $l) {
 				$lista_estado .= "<option value='".$l['id']."'>".$l['sigla']."</option>";
 			}
 			$acomodacoes = $acomodacao -> listar();
-			while ($l = mysql_fetch_array($acomodacoes)) {
+			foreach ($acomodacoes as $l) {
 				$lista_acomodacao .= "<option value='".$l['id']."'>".$l['acomodacao']."</option>";
 			}
 			$pontos = $ponto_embarque -> listar();
-			while ($l = mysql_fetch_array($pontos)) {
+			foreach ($pontos as $l) {
 				$lista_ponto .= "<option value='".$l['id']."'>".$l['ponto']."</option>";
 			}
 			$lista_tipo_transporte = $tipo_transporte -> listar();

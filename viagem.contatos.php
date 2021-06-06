@@ -7,7 +7,7 @@ class ici extends TCPDF {
 	public function Header() {
 		$this->Sety(10);
 		$this->SetFont('helvetica', 'B', 20);
-		$this->Cell(0, 10, utf8_encode('AGÊNCIA 5M DE IRAJÁ LTDA'), 0, 1, 'C', 0, '', 0, false, 'M', 'M');
+		$this->Cell(0, 10, utf8_encode('AGï¿½NCIA 5M DE IRAJï¿½ LTDA'), 0, 1, 'C', 0, '', 0, false, 'M', 'M');
 		$this->SetFont('helvetica', 'B', 14);
 		$this->Cell(0, 0, 'Contatos dos passageiros - '.$_POST['viagem'], 0, 1, 'C', 0, '', 1);
 	
@@ -32,12 +32,12 @@ $pdf->addPage();
 $pdf->SetFont('helvetica', '', 11);
 
 $lista_passageiros = $viagem -> contatos_passageiros($_POST['id_viagem']);
-if (mysql_num_rows($lista_passageiros) > 0) {
-	while ($l = mysql_fetch_array($lista_passageiros)) {
+if (count($lista_passageiros) > 0) {
+	foreach ($lista_passageiros as $l) {
 		$pdf->Cell(120, 0, utf8_encode($l['cliente']), 'B', 0, 'L', 0, '', 1);
 		$pdf->Cell(80, 0, $l['telefones'], 'B', 1, 'R', 0, '', 1);
 	}
-	$pdf->Cell(200, 0, mysql_num_rows($lista_passageiros).' Passageiros', 0, 1, 'R', 0, '', 1);
+	$pdf->Cell(200, 0, count($lista_passageiros).' Passageiros', 0, 1, 'R', 0, '', 1);
 }
 else {
 	$pdf->Cell(0, 0, 'Nenhum passageiro na viagem', 0, 1, 'C', 0, '', 1);

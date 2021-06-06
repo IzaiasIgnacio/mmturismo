@@ -11,9 +11,9 @@ class ici extends TCPDF {
 	function exibir($dados,$x=15) {
 		$this->SetX($x);
 		$this->Cell(90,2,'','LTR',2,'C',false,'',0,true);
-		$this->Cell(90,5,utf8_encode("AGÊNCIA 5M DE IRAJÁ"),'LR',2,'C',false,'',0,true);
+		$this->Cell(90,5,"AGÃŠNCIA 5M DE IRAJÃ",'LR',2,'C',false,'',0,true);
 		$this->SetFont('helvetica', 'B', 10);
-		$this->Cell(90,7,utf8_encode($dados['hotel'].' - '.$dados['cidade'].' - '.$dados['sigla']),'LR',2,'C',false,'',1,true);
+		$this->Cell(90,7,$dados['hotel'].' - '.$dados['cidade'].' - '.$dados['sigla'],'LR',2,'C',false,'',1,true);
 		$this->SetFont('helvetica', 'B', 11);
 		$this->Cell(90,6,'Tel. '.str_replace(',',' / ',$dados['telefones']),'LR',2,'C',false,'',0,true);
 		$this->SetFont('helvetica', '', 25);
@@ -26,7 +26,7 @@ class ici extends TCPDF {
 		$this->SetFont('helvetica', '', 15);
 		$this->Cell(90,9,'Nome:','LR',2,'C',false,'',0,true,'T','B');
 		$this->SetFont('helvetica', '', 20);
-		$this->Cell(90,10,utf8_encode($dados['cliente']),'LBR',2,'C',false,'',1,true);
+		$this->Cell(90,10,$dados['cliente'],'LBR',2,'C',false,'',1,true);
 	}
 }
 
@@ -37,13 +37,13 @@ $pdf->SetMargins(15, 10, 15);
 $pdf->AddPage();
 
 $lista_passageiros = $viagem -> lista_etiquetas($_POST);
-if (mysql_num_rows($lista_passageiros) > 0) {
+if (count($lista_passageiros) > 0) {
 	$proxima = 0;
 	$num = 0;
 	$posicao = '';
 	$y = '';
 	$y_direita = '';
-	while ($l = mysql_fetch_array($lista_passageiros)) {
+	foreach ($lista_passageiros as $l) {
 		if ($num > 9) {
 			$pdf->AddPage();
 			$y = 10;

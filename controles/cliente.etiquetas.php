@@ -15,11 +15,11 @@ class ici extends TCPDF {
 		//largura da etiqueta = 101.6
 		//altura da etiqueta = 25.4
 		$this->Cell(101.6,0.7,'','',2,'L',false,'',0,true);
-		$this->Cell(101.6,6,mb_convert_case(utf8_encode($dados['cliente']),MB_CASE_TITLE,'UTF-8'),'LTR',2,'L',false,'',0,true);
+		$this->Cell(101.6,6,mb_convert_case($dados['cliente'],MB_CASE_TITLE,'UTF-8'),'LTR',2,'L',false,'',0,true);
 		$complemento = ($dados['complemento'] == '') ? '' : ' - '.$dados['complemento'];
-		$this->Cell(101.6,6,mb_convert_case(utf8_encode($dados['endereco']),MB_CASE_TITLE,'UTF-8').', '.$dados['numero'].mb_convert_case(utf8_encode($complemento),MB_CASE_TITLE,'UTF-8'),'LR',2,'L',false,'',1,true);
-		$this->Cell(101.6,6,'Bairro: '.mb_convert_case(utf8_encode($dados['bairro']),MB_CASE_TITLE,'UTF-8'),'LR',2,'L',false,'',0,true);
-		$this->Cell(101.6,6,mb_convert_case(utf8_encode($dados['cidade']),MB_CASE_TITLE,'UTF-8').' - '.$dados['sigla'].' CEP: '.$dados['cep'],'LBR',2,'L',false,'',1,true);
+		$this->Cell(101.6,6,mb_convert_case($dados['endereco'],MB_CASE_TITLE,'UTF-8').', '.$dados['numero'].mb_convert_case($complemento,MB_CASE_TITLE,'UTF-8'),'LR',2,'L',false,'',1,true);
+		$this->Cell(101.6,6,'Bairro: '.mb_convert_case($dados['bairro'],MB_CASE_TITLE,'UTF-8'),'LR',2,'L',false,'',0,true);
+		$this->Cell(101.6,6,mb_convert_case($dados['cidade'],MB_CASE_TITLE,'UTF-8').' - '.$dados['sigla'].' CEP: '.$dados['cep'],'LBR',2,'L',false,'',1,true);
 		$this->Cell(101.6,1.4,'','',2,'L',false,'',0,true);
 	}
 }
@@ -57,13 +57,13 @@ $posicao_vertical[21] = 266;
 $pdf->AddPage();
 
 $lista_cliente = $cliente -> lista_etiquetas($_POST);
-if (mysql_num_rows($lista_cliente) > 0) {
+if (count($lista_cliente) > 0) {
 	$num = 0;
 	$posicao = '';
 	$y = '';
 	$y_direita = '';
 	$espaco_vertical = 0;
-	while ($l = mysql_fetch_array($lista_cliente)) {
+	foreach ($lista_cliente as $l) {
 		//22 etiquetas por pagina
 		if ($num > 21) {
 			//nova pagina

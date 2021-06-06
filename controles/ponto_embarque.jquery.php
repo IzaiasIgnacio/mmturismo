@@ -1,5 +1,5 @@
 <?php
-switch($_POST[acao]) {
+switch($_POST['acao']) {
 	case 'cadastrar_ponto':
 		require_once ('../classes/ponto_embarque.class.php');
 		$ponto_embarque = new ponto_embarque();

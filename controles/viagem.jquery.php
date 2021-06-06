@@ -15,7 +15,7 @@ if (get_magic_quotes_gpc()) {
     unset($process);
 }
 
-switch($_POST[acao]) {
+switch($_POST['acao']) {
 	//excluir viagem
 	case 'excluir_viagem':
 		require_once('../classes/viagem.class.php');
@@ -30,11 +30,8 @@ switch($_POST[acao]) {
 	
 		$dados = $viagem -> buscar_dados($_POST['viagem']);
 	
-		$d = mysql_fetch_array($dados);
-		
 		//retornar como json
-		$d = array_map(utf8_encode, $d);
-		echo json_encode($d);
+		echo json_encode($dados);
 	break;
 	//autocomplete viagens
 	case 'buscar_viagens':
@@ -43,9 +40,8 @@ switch($_POST[acao]) {
 	
 		$lista_viagem = $viagem -> buscar($_POST['viagem']);
 	
-		if (mysql_num_rows($lista_viagem) > 0) {
-			while($l = mysql_fetch_array($lista_viagem)) {
-				$l = array_map(utf8_encode, $l);
+		if (count($lista_viagem) > 0) {
+			foreach ($lista_viagem as $l) {
 				//adicionar ao array
 				$viagens[] = $l;
 			}
@@ -64,15 +60,15 @@ switch($_POST[acao]) {
 	
 		$lista_destinos = $viagem -> buscar_destinos($_POST['id_viagem']);
 	
-		if (mysql_num_rows($lista_destinos) > 0) {
+		if (count($lista_destinos) > 0) {
 			echo "<tr class='linha' style='display:none'>";
 			echo "	<td colspan='3' class='vazio'>Nenhum destino informado</td>";
 			echo "</tr>";
 			$c = 0;
-			while ($l = mysql_fetch_array($lista_destinos)) {
+			foreach ($lista_destinos as $l) {
 				echo "	<tr class='linha'>";
-				echo "		<td>".utf8_encode($l['sigla'])."</td>";
-				echo "		<td>".utf8_encode($l['cidade'])."</td>";
+				echo "		<td>".$l['sigla']."</td>";
+				echo "		<td>".$l['cidade']."</td>";
 				echo "		<td><div class='btn_remover' name='destino_".$c."'></div></td>";
 				echo "		<input type='hidden' name='valor_cidade_destino' value='".$l['id_cidade']."'>";
 				echo "		<input type='hidden' name='destino_".$c."' id='destino_".$c."' value='".$l['id']."'>";
@@ -93,18 +89,18 @@ switch($_POST[acao]) {
 	
 		$lista_transportes = $viagem -> buscar_transportes($_POST['id_viagem']);
 		
-		if (mysql_num_rows($lista_transportes) > 0) {
+		if (count($lista_transportes) > 0) {
 			echo "<tr style='display:none'>";
 			echo "	<td colspan='6' class='vazio'>Nenhum transporte informado</td>";
 			echo "</tr>";
 			$c = 0;
-			while ($l = mysql_fetch_array($lista_transportes)) {
+			foreach ($lista_transportes as $l) {
 				$lista_sinais = $viagem -> buscar_sinais('transporte', $l['id']);
 				echo  "<tr class='linha'>";
-				echo  "		<td>".utf8_encode($l['tipo_transporte'])."</td>";
-				echo  "		<td>".utf8_encode($l['empresa'])."</td>";
+				echo  "		<td>".$l['tipo_transporte']."</td>";
+				echo  "		<td>".$l['empresa']."</td>";
 				echo  "		<td><input type='text' value='".$l['quantidade']."' name='quantidade_transporte_".$c."' id='quantidade_transporte_".$c."' value='1' class='quantidade'></td>";
-				echo  "		<td><input type='text' value='".utf8_encode($l['contato'])."' name='contato_transporte_".$c."' id='contato_transporte_".$c."' class='contato'></td>";
+				echo  "		<td><input type='text' value='".$l['contato']."' name='contato_transporte_".$c."' id='contato_transporte_".$c."' class='contato'></td>";
 				echo  "		<td><input type='text' value='".$l['valor']."' name='valor_transporte_".$c."' id='valor_transporte_".$c."' class='valor'></td>";
 				echo  "		<td><div class='btn_remover' name='transporte_".$c."'></div></td>";
 				echo "		<input type='hidden' name='valor_transporte' value='".$l['id_empresa_tipo_transporte']."'>";
@@ -123,12 +119,12 @@ switch($_POST[acao]) {
 				echo  "							</tr>";
 				echo  "						</thead>";
 				echo  "						<tbody>";
-				if (mysql_num_rows($lista_sinais) > 0) {
+				if (count($lista_sinais) > 0) {
 					echo  "						<tr class='linha' style='display:none'>";
 					echo  "							<td colspan='3' class='vazio'>Nenhum sinal informado</td>";
 					echo  "						</tr>";
 					$i = 0;
-					while ($ls = mysql_fetch_array($lista_sinais)) {
+					foreach ($lista_sinais as $l) {
 						echo  "					<tr class='linha'>";
 						echo  "						<td>".$ls['data']."</td>";
 						echo  "						<td>".$ls['valor']."</td>";
@@ -166,17 +162,17 @@ switch($_POST[acao]) {
 	
 		$lista_restaurantes = $viagem -> buscar_restaurantes($_POST['id_viagem']);
 	
-		if (mysql_num_rows($lista_restaurantes) > 0) {
+		if (count($lista_restaurantes) > 0) {
 			echo "<tr class='linha' style='display:none'>";
 			echo "	<td colspan='8' class='vazio'>Nenhum restaurante informado</td>";
 			echo "</tr>";
 			$c = 0;
-			while ($l = mysql_fetch_array($lista_restaurantes)) {
+			foreach ($lista_restaurantes as $l) {
 				$lista_sinais = $viagem -> buscar_sinais('restaurante', $l['id']);
 				echo "<tr class='linha'>";
-				echo "		<td>".utf8_encode($l['sigla'])."</td>";
-				echo "		<td>".utf8_encode($l['cidade'])."</td>";
-				echo "		<td>".utf8_encode($l['restaurante'])."</td>";
+				echo "		<td>".$l['sigla']."</td>";
+				echo "		<td>".$l['cidade']."</td>";
+				echo "		<td>".$l['restaurante']."</td>";
 				echo "		<td><input type='text' value='".$l['data']."' name='data_restaurante_".$c."' id='data_restaurante_".$c."' size='8' class='data'></td>";
 				echo "		<td><input type='text' value='".$l['hora']."' name='hora_restaurante_".$c."' id='hora_restaurante_".$c."' size='4' class='hora'></td>";
 				echo "		<td><input type='text' value='".$l['contato']."' name='contato_restaurante_".$c."' id='contato_restaurante_".$c."' class='contato'></td>";
@@ -198,12 +194,12 @@ switch($_POST[acao]) {
 				echo  "							</tr>";
 				echo  "						</thead>";
 				echo  "						<tbody>";
-				if (mysql_num_rows($lista_sinais) > 0) {
+				if (count($lista_sinais) > 0) {
 					echo  "						<tr class='linha' style='display:none'>";
 					echo  "							<td colspan='3' class='vazio'>Nenhum sinal informado</td>";
 					echo  "						</tr>";
 					$i = 0;
-					while ($ls = mysql_fetch_array($lista_sinais)) {
+					foreach ($lista_sinais as $l) {
 						echo  "					<tr class='linha'>";
 						echo  "						<td>".$ls['data']."</td>";
 						echo  "						<td>".$ls['valor']."</td>";
@@ -242,17 +238,17 @@ switch($_POST[acao]) {
 	
 		$lista_hoteis = $viagem -> buscar_hoteis($_POST['id_viagem']);
 	
-		if (mysql_num_rows($lista_hoteis) > 0) {
+		if (count($lista_hoteis) > 0) {
 			echo "<tr class='linha' style='display:none'>";
 			echo "	<td colspan='9' class='vazio'>Nenhum hotel informado</td>";
 			echo "</tr>";
 			$c = 0;
-			while ($l = mysql_fetch_array($lista_hoteis)) {
+			foreach ($lista_hoteis as $l) {
 				$lista_sinais = $viagem -> buscar_sinais('hotel', $l['id']);
 				echo "<tr class='linha'>";
-				echo "		<td>".utf8_encode($l['sigla'])."</td>";
-				echo "		<td>".utf8_encode($l['cidade'])."</td>";
-				echo "		<td>".utf8_encode($l['hotel'])."</td>";
+				echo "		<td>".$l['sigla']."</td>";
+				echo "		<td>".$l['cidade']."</td>";
+				echo "		<td>".$l['hotel']."</td>";
 				echo "		<td><input type='text' value='".$l['data_chegada']."' name='chegada_hotel_".$c."' size='8' id='chegada_hotel_".$c."' class='data'></td>";
 				echo "		<td><input type='text' value='".$l['hora']."' name='hora_hotel_".$c."' size='4' id='hora_hotel_".$c."' class='hora'></td>";
 				echo "		<td><input type='text' value='".$l['data_saida']."' name='saida_hotel_".$c."' size='8' id='saida_hotel_".$c."' class='data'></td>";
@@ -275,12 +271,12 @@ switch($_POST[acao]) {
 				echo  "							</tr>";
 				echo  "						</thead>";
 				echo  "						<tbody>";
-				if (mysql_num_rows($lista_sinais) > 0) {
+				if (count($lista_sinais) > 0) {
 					echo  "						<tr class='linha' style='display:none'>";
 					echo  "							<td colspan='3' class='vazio'>Nenhum sinal informado</td>";
 					echo  "						</tr>";
 					$i = 0;
-					while ($ls = mysql_fetch_array($lista_sinais)) {
+					foreach ($lista_sinais as $l) {
 						echo  "					<tr class='linha'>";
 						echo  "						<td>".$ls['data']."</td>";
 						echo  "						<td>".$ls['valor']."</td>";
@@ -317,7 +313,7 @@ switch($_POST[acao]) {
 	
 		$lista_clientes = $viagem -> buscar_clientes($_POST['id_viagem']);
 	
-		if (mysql_num_rows($lista_clientes) > 0) {
+		if (count($lista_clientes) > 0) {
 			echo "<tr class='linha' style='display:none'>";
 			echo "	<td colspan='5' class='vazio'>Nenhum cliente informado</td>";
 			echo "</tr>";
@@ -327,10 +323,10 @@ switch($_POST[acao]) {
 			echo "	</td>";
 			echo "</tr>";
 			$c = 0;
-			while ($l = mysql_fetch_array($lista_clientes)) {
+			foreach ($lista_clientes as $l) {
 				echo "<tr class='linha_cliente'>";
 				$html_telefones = ($l['telefone'] != '') ? " - ".$l['telefone']."</label> <div class='btn_info_viagem' name='info_".$l['id_cliente']."'></div>" : '</label>';
-				echo "	<td colspan='5'><label>".utf8_encode($l['cliente']).$html_telefones."</td>";
+				echo "	<td colspan='5'><label>".$l['cliente'].$html_telefones."</td>";
 				echo "	<input type='hidden' class='valor_cliente' name='valor_cliente_".$c."' value='".$l['id_cliente']."'>";
 				echo "	<input type='hidden' id='viagem_cliente_".$c."' name='viagem_cliente_".$c."' value='".$l['id']."'>";
 				echo "</tr>";
@@ -385,8 +381,8 @@ switch($_POST[acao]) {
 		
 		$lista_rooming = $viagem -> buscar_rooming($_POST['id_viagem']);
 		
-		if (mysql_num_rows($lista_rooming) > 0) {
-			while ($l = mysql_fetch_array($lista_rooming)) {
+		if (count($lista_rooming) > 0) {
+			foreach ($lista_rooming as $l) {
 				$rooming[$l['indice']][] = $l;
 			}
 			echo "<span class='titulo_dados'>Rooming List</span>";
@@ -462,15 +458,15 @@ switch($_POST[acao]) {
 	
 		$lista_destinos = $viagem -> buscar_destinos($_POST['id_viagem']);
 	
-		if (mysql_num_rows($lista_destinos) > 0) {
+		if (count($lista_destinos) > 0) {
 			echo "<tr class='linha' style='display:none'>";
 			echo "	<td colspan='2' class='vazio'>Nenhum destino informado</td>";
 			echo "</tr>";
 			$c = 0;
-			while ($l = mysql_fetch_array($lista_destinos)) {
+			foreach ($lista_destinos as $l) {
 				echo "	<tr class='linha'>";
-				echo "		<td>".utf8_encode($l['sigla'])."</td>";
-				echo "		<td>".utf8_encode($l['cidade'])."</td>";
+				echo "		<td>".$l['sigla']."</td>";
+				echo "		<td>".$l['cidade']."</td>";
 				echo "	</tr>";
 				$c++;
 			}
@@ -488,17 +484,17 @@ switch($_POST[acao]) {
 	
 		$lista_transportes = $viagem -> buscar_transportes($_POST['id_viagem']);
 	
-		if (mysql_num_rows($lista_transportes) > 0) {
+		if (count($lista_transportes) > 0) {
 			echo "<tr style='display:none'>";
 			echo "	<td colspan='5' class='vazio'>Nenhum transporte informado</td>";
 			echo "</tr>";
-			while ($l = mysql_fetch_array($lista_transportes)) {
+			foreach ($lista_transportes as $l) {
 				$lista_sinais = $viagem -> buscar_sinais('transporte', $l['id']);
 				echo  "<tr class='linha'>";
-				echo  "		<td>".utf8_encode($l['tipo_transporte'])."</td>";
-				echo  "		<td>".utf8_encode($l['empresa'])."</td>";
+				echo  "		<td>".$l['tipo_transporte']."</td>";
+				echo  "		<td>".$l['empresa']."</td>";
 				echo  "		<td>".$l['quantidade']."</td>";
-				echo  "		<td>".utf8_encode($l['contato'])."</td>";
+				echo  "		<td>".$l['contato']."</td>";
 				echo  "		<td>".$l['valor']."</td>";
 				echo  "</tr>";
 				echo  "<tr>";
@@ -513,11 +509,11 @@ switch($_POST[acao]) {
 				echo  "							</tr>";
 				echo  "						</thead>";
 				echo  "						<tbody>";
-				if (mysql_num_rows($lista_sinais) > 0) {
+				if (count($lista_sinais) > 0) {
 					echo  "						<tr class='linha' style='display:none'>";
 					echo  "							<td colspan='2' class='vazio'>Nenhum sinal informado</td>";
 					echo  "						</tr>";
-					while ($ls = mysql_fetch_array($lista_sinais)) {
+					foreach ($lista_sinais as $l) {
 						echo  "					<tr class='linha'>";
 						echo  "						<td>".$ls['data']."</td>";
 						echo  "						<td>".$ls['valor']."</td>";
@@ -550,16 +546,16 @@ switch($_POST[acao]) {
 	
 		$lista_restaurantes = $viagem -> buscar_restaurantes($_POST['id_viagem']);
 	
-		if (mysql_num_rows($lista_restaurantes) > 0) {
+		if (count($lista_restaurantes) > 0) {
 			echo "<tr class='linha' style='display:none'>";
 			echo "	<td colspan='7' class='vazio'>Nenhum restaurante informado</td>";
 			echo "</tr>";
-			while ($l = mysql_fetch_array($lista_restaurantes)) {
+			foreach ($lista_restaurantes as $l) {
 				$lista_sinais = $viagem -> buscar_sinais('restaurante', $l['id']);
 				echo "<tr class='linha'>";
-				echo "		<td>".utf8_encode($l['sigla'])."</td>";
-				echo "		<td>".utf8_encode($l['cidade'])."</td>";
-				echo "		<td>".utf8_encode($l['restaurante'])."</td>";
+				echo "		<td>".$l['sigla']."</td>";
+				echo "		<td>".$l['cidade']."</td>";
+				echo "		<td>".$l['restaurante']."</td>";
 				echo "		<td>".$l['data']."</td>";
 				echo "		<td>".$l['hora']."</td>";
 				echo "		<td>".$l['contato']."</td>";
@@ -577,11 +573,11 @@ switch($_POST[acao]) {
 				echo  "							</tr>";
 				echo  "						</thead>";
 				echo  "						<tbody>";
-				if (mysql_num_rows($lista_sinais) > 0) {
+				if (count($lista_sinais) > 0) {
 					echo  "						<tr class='linha' style='display:none'>";
 					echo  "							<td colspan='2' class='vazio'>Nenhum sinal informado</td>";
 					echo  "						</tr>";
-					while ($ls = mysql_fetch_array($lista_sinais)) {
+					foreach ($lista_sinais as $l) {
 						echo  "					<tr class='linha'>";
 						echo  "						<td>".$ls['data']."</td>";
 						echo  "						<td>".$ls['valor']."</td>";
@@ -615,16 +611,16 @@ switch($_POST[acao]) {
 	
 		$lista_hoteis = $viagem -> buscar_hoteis($_POST['id_viagem']);
 	
-		if (mysql_num_rows($lista_hoteis) > 0) {
+		if (count($lista_hoteis) > 0) {
 			echo "<tr class='linha' style='display:none'>";
 			echo "	<td colspan='8' class='vazio'>Nenhum hotel informado</td>";
 			echo "</tr>";
-			while ($l = mysql_fetch_array($lista_hoteis)) {
+			foreach ($lista_hoteis as $l) {
 				$lista_sinais = $viagem -> buscar_sinais('hotel', $l['id']);
 				echo "<tr class='linha'>";
-				echo "		<td>".utf8_encode($l['sigla'])."</td>";
-				echo "		<td>".utf8_encode($l['cidade'])."</td>";
-				echo "		<td>".utf8_encode($l['hotel'])."</td>";
+				echo "		<td>".$l['sigla']."</td>";
+				echo "		<td>".$l['cidade']."</td>";
+				echo "		<td>".$l['hotel']."</td>";
 				echo "		<td>".$l['data_chegada']."</td>";
 				echo "		<td>".$l['hora']."</td>";
 				echo "		<td>".$l['data_saida']."</td>";
@@ -643,11 +639,11 @@ switch($_POST[acao]) {
 				echo  "							</tr>";
 				echo  "						</thead>";
 				echo  "						<tbody>";
-				if (mysql_num_rows($lista_sinais) > 0) {
+				if (count($lista_sinais) > 0) {
 					echo  "						<tr class='linha' style='display:none'>";
 					echo  "							<td colspan='2' class='vazio'>Nenhum sinal informado</td>";
 					echo  "						</tr>";
-					while ($ls = mysql_fetch_array($lista_sinais)) {
+					foreach ($lista_sinais as $l) {
 						echo  "					<tr class='linha'>";
 						echo  "						<td>".$ls['data']."</td>";
 						echo  "						<td>".$ls['valor']."</td>";
@@ -681,19 +677,19 @@ switch($_POST[acao]) {
 	
 		$lista_clientes = $viagem -> buscar_clientes($_POST['id_viagem']);
 	
-		if (mysql_num_rows($lista_clientes) > 0) {
+		if (count($lista_clientes) > 0) {
 			echo "<tr class='linha' style='display:none'>";
 			echo "	<td colspan='5' class='vazio'>Nenhum cliente informado</td>";
 			echo "</tr>";
-			while ($l = mysql_fetch_array($lista_clientes)) {
+			foreach ($lista_clientes as $l) {
 				echo "<tr class='linha_cliente'>";
 				$html_telefones = ($l['telefone'] != '') ? " - ".$l['telefone']."</label> <div class='btn_info_viagem' name='info_".$l['id_cliente']."'></div>" : '</label>';
-				echo "	<td colspan='5'><label>".utf8_encode($l['cliente']).$html_telefones."</td>";
+				echo "	<td colspan='5'><label>".$l['cliente'].$html_telefones."</td>";
 				echo "</tr>";
 				echo "<tr class='linha'>";
-				echo "	<td class='td_esquerda'>".utf8_encode($l['transporte_cliente'])." ".$l['numero_transporte']."</td>";
+				echo "	<td class='td_esquerda'>".$l['transporte_cliente']." ".$l['numero_transporte']."</td>";
 				echo "	<td>".$l['poltrona']."</td>";
-				echo "	<td>".utf8_encode($l['ponto_cliente'])."</td>";
+				echo "	<td>".$l['ponto_cliente']."</td>";
 				echo "	<td>".$l['hora_embarque']."</td>";
 				//echo "	<td>".$l['numero_apartamento']."</td>";
 				echo "</tr>";
@@ -714,13 +710,13 @@ switch($_POST[acao]) {
 	
 		$lista_rooming = $viagem -> buscar_rooming($_POST['id_viagem']);
 	
-		if (mysql_num_rows($lista_rooming) > 0) {
-			while ($l = mysql_fetch_array($lista_rooming)) {
+		if (count($lista_rooming) > 0) {
+			foreach ($lista_rooming as $l) {
 				$rooming[$l['indice']][] = $l;
 			}
 			echo "<span class='titulo_dados'>Rooming List</span>";
 			foreach ($rooming as $i => $room) {
-				$nome_hoteis = mysql_fetch_array($viagem -> buscar_hoteis_rooming($_POST['id_viagem'],$i));
+				$nome_hoteis = $viagem -> buscar_hoteis_rooming($_POST['id_viagem'], $i);
 				echo "<div style='text-align:center;font-weight:bold;'>".$nome_hoteis['nome_hoteis']."</div>";
 				echo "<table class='lista'>";
 				echo "	<thead>";
@@ -738,8 +734,8 @@ switch($_POST[acao]) {
 					echo "	<td class='td_esquerda'>";
 					$clientes = explode(",",$dados['nome_clientes']);
 					foreach ($clientes as $cliente) {
-						echo utf8_encode($cliente)."<br>";
-					}
+						echo $cliente."<br>";
+				}
 					echo "	</td>";
 					echo "	<td>".$dados['acomodacao']."</td>";
 					echo "	<td>".$dados['camas_casal']."</td>";
@@ -764,8 +760,8 @@ switch($_POST[acao]) {
 	
 		$lista_bairro = $viagem -> buscar_bairros($_POST['id_viagem']);
 		
-		while ($l = mysql_fetch_array($lista_bairro)) {
-			echo "<option value='".utf8_encode($l['bairro'])."'>".utf8_encode($l['bairro'])."</option>";
+		foreach ($lista_bairro as $l) {
+			echo "<option value='".$l['bairro']."'>".$l['bairro']."</option>";
 		}
 	break;
 }

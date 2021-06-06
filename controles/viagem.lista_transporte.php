@@ -10,9 +10,9 @@ class ici extends TCPDF {
 	
 	function cabecalho($empresa,$numero) {
 		$this->SetFont('helvetica', 'B', 20);
-		$this->Cell(0, 5, utf8_encode('AGÊNCIA 5M DE IRAJÁ LTDA'), 0, 1, 'C', 0, '', 0, false, 'M', 'M');
+		$this->Cell(0, 5, 'AGÃŠNCIA 5M DE IRAJÃ LTDA', 0, 1, 'C', 0, '', 0, false, 'M', 'M');
 		$this->SetFont('helvetica', '', 11);
-		$this->MultiCell(0, 2, utf8_encode($_POST['cabecalho']), 0, 'C', 0, 1, '', '', true);
+		$this->MultiCell(0, 2, $_POST['cabecalho'], 0, 'C', 0, 1, '', '', true);
 		
 		$this->SetFont('helvetica', 'B', 14);
 		$this->Cell(0, 0, 'Listagem para Empresa de Transporte', 0, 1, 'C', 0, '', 1);
@@ -21,7 +21,7 @@ class ici extends TCPDF {
 		$this->Cell(0, 0, $empresa." ".$numero, 0, 1, 'C', 0, '', 1);
 		$this->Cell(140, 0, 'Nome dos passageiros', 'B', 0, 'C', 0, '', 1);
 		$this->Cell(25, 0, 'Registro', 'B', 0, 'C', 0, '', 1);
-		$this->Cell(35, 0, utf8_encode('Órgão Emissor'), 'B', 1, 'C', 0, '', 1);
+		$this->Cell(35, 0, 'Ã“rgÃ£o Emissor', 'B', 1, 'C', 0, '', 1);
 	
 		$this->SetFont('helvetica', '', 11);
 	}
@@ -39,9 +39,9 @@ $pdf->SetMargins(5, 10, 5);
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
 $lista_passageiros = $viagem -> lista_passageiros($_POST['id_viagem']);
-if (mysql_num_rows($lista_passageiros) > 0) {
+if (count($lista_passageiros) > 0) {
 	$passageiros = array();
-	while ($l = mysql_fetch_array($lista_passageiros)) {
+	foreach ($lista_passageiros as $l) {
 		$passageiros[$l['empresa']." - ".$l['tipo_transporte']][$l['numero_transporte']][] = array($l['cliente'],$l['rg'],$l['sigla']);
 	}
 	
@@ -50,11 +50,11 @@ if (mysql_num_rows($lista_passageiros) > 0) {
 		for ($i=1;$i<=$num;$i++) {
 			$c = 0;
 			$pdf->AddPage();
-			$pdf->cabecalho(utf8_encode($empresa),$i);
+			$pdf->cabecalho($empresa,$i);
 			foreach ($transporte[$i] as $pessoa) {
-				$pdf->Cell(125, 0, utf8_encode($pessoa[0]), 'B', 0, 'L', 0, '', 1);
+				$pdf->Cell(125, 0, $pessoa[0], 'B', 0, 'L', 0, '', 1);
 				$pdf->Cell(35, 0, $pessoa[1], 'B', 0, 'C', 0, '', 1);
-				$pdf->Cell(40, 0, utf8_encode($pessoa[2]), 'B', 1, 'C', 0, '', 1);
+				$pdf->Cell(40, 0, $pessoa[2], 'B', 1, 'C', 0, '', 1);
 				$c++;
 			}
 			$pdf->Ln(2);

@@ -55,13 +55,13 @@ $posicao_vertical[19] = 240.6;
 $pdf->AddPage();
 
 $lista_cliente = $cliente -> lista_etiquetas($_POST);
-if (mysql_num_rows($lista_cliente) > 0) {
+if (count($lista_cliente) > 0) {
 	$num = 0;
 	$posicao = '';
 	$y = '';
 	$y_direita = '';
 	$espaco_vertical = 0;
-	while ($l = mysql_fetch_array($lista_cliente)) {
+	foreach ($lista_cliente as $l) {
 		//20 etiquetas por pagina
 		if ($num > 19) {
 			//nova pagina

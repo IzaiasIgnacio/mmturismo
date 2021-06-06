@@ -360,7 +360,7 @@ controle_empresa('cadastrar');
 			<input type='text' name='conta' id='conta' size='20' maxlength='15'>
 			<div class='espaco'></div>
 			<label class='label_campo esquerda'>Titular: </label>
-			<input type='text' name='titular' id='titular' size='70' maxlength='70'>
+			<input type='text' name='titular' id='titular' size='60' maxlength='70'>
 			<div class='espaco'></div>
 			<label class='label_campo esquerda'>CPF / CNPJ: </label>
 			<select name='tipo_documento' id='tipo_documento'>
@@ -398,14 +398,14 @@ controle_empresa('cadastrar');
 			<label class='label_campo esquerda'>Estado: </label>
 			<select name='estado' id='estado'>
 				<option value=''>Selecione</option>
-				<?php while ($le = mysql_fetch_array($lista_estado)) { ?>
+				<?php foreach ($lista_estado as $le) { ?>
 				<option value='<?php echo $le['id']; ?>'><?php echo $le['sigla']; ?></option>
 				<?php } ?>
 			</select>
 			<label class='label_campo'>Cidade: </label>
 			<select name='cidade' id='cidade'>
 				<option value=''>Selecione</option>
-				<?php while ($lc = mysql_fetch_array($lista_cidade)) { ?>
+				<?php foreach ($lista_cidade as $lc) { ?>
 				<option value='<?php echo $lc['id']; ?>'><?php echo $lc['cidade']; ?></option>
 				<?php } ?>
 			</select>
@@ -440,9 +440,9 @@ controle_empresa('cadastrar');
 		</fieldset>
 		<fieldset style='text-align:center'>
 			<span class='titulo_dados'>Tipos de transporte</span>
-			<?php while ($lt = mysql_fetch_array($lista_tipo_transporte)) { ?>
+			<?php foreach ($lista_tipo_transporte as $lt) { ?>
 			<input type='checkbox' name='tipo_transporte[]' id='tipo_<?php echo $lt['id']; ?>' value='<?php echo $lt['id']; ?>'>
-			<label for='tipo_<?php echo $lt['id']; ?>'><?php echo utf8_encode($lt['tipo_transporte']); ?></label>
+			<label for='tipo_<?php echo $lt['id']; ?>'><?php echo $lt['tipo_transporte']; ?></label>
 			<?php } ?>
 		</fieldset>
 		<fieldset>

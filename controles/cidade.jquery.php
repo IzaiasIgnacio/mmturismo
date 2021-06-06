@@ -1,5 +1,5 @@
 <?php
-switch($_POST[acao]) {
+switch($_POST['acao']) {
 	case 'listar_cidades':
 		require_once('../classes/cidade.class.php');
 		$cidade = new cidade();
@@ -7,7 +7,7 @@ switch($_POST[acao]) {
 		$lista_cidade = $cidade -> listar($_POST['estado']);
 		
 		$html = "<option value=''>Selecione a cidade</option>";
-		while ($l = mysql_fetch_array($lista_cidade)) {
+		foreach ($lista_cidade as $l) {
 			$html .= "<option value='".$l['id']."'>".$l['cidade']."</option>";
 		}
 		echo $html;

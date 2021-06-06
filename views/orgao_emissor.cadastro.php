@@ -159,14 +159,14 @@ controle_orgao_emissor('cadastrar');
 							<td width='8%'>Remover</td>
 						</tr>
 					</thead>
-					<?php if (mysql_num_rows($lista_orgao_emissor) > 0) { ?>
+					<?php if (count($lista_orgao_emissor) > 0) { ?>
 						<tr style='display:none' class='linha'>
 							<td colspan='5' class='vazio'>Nenhum &oacute;rg&atilde;o informado</td>
 						</tr>
-						<?php while ($l = mysql_fetch_array($lista_orgao_emissor)) { ?>
+						<?php foreach ($lista_orgao_emissor as $l) { ?>
 							<tr class='linha'>
-								<td><?php echo utf8_encode($l['sigla']); ?></td>
-								<td><?php echo utf8_encode($l['orgao_emissor']); ?></td>
+								<td><?php echo $l['sigla']; ?></td>
+								<td><?php echo $l['orgao_emissor']; ?></td>
 								<td><div class='btn_editar' id='editar_<?php echo $l['id']; ?>'></div></td>
 								<td><div class='btn_remover' id='remover_<?php echo $l['id']; ?>'></div></td>
 							</tr>	

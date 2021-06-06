@@ -1,10 +1,10 @@
 <?php
 function campo_sql($valor) {
-	return mb_strtoupper(str_replace("_","",$valor),'latin1');
+	return mb_strtoupper(str_replace("_","",$valor),'utf8');
 }
 
 function email_sql($valor) {
-	return mb_strtoupper($valor,'latin1');
+	return mb_strtoupper($valor,'utf8');
 }
 
 function data_sql($data) {

@@ -8,7 +8,7 @@ class ici extends TCPDF {
 	public function Header() {
 		$this->Sety(10);
 		$this->SetFont('helvetica', 'B', 20);
-		$this->Cell(0, 10, utf8_encode('AG�NCIA 5M DE IRAJ� LTDA'), 0, 1, 'C', 0, '', 0, false, 'M', 'M');
+		$this->Cell(0, 10, utf8_encode('AGÊNCIA 5M DE IRAJÁ LTDA'), 0, 1, 'C', 0, '', 0, false, 'M', 'M');
 		$this->SetFont('helvetica', '', 11);
 		$this->SetFont('helvetica', 'B', 14);
 		$this->Cell(0, 0, 'Listagem para Seguro Viagem', 0, 1, 'C', 0, '', 1);
@@ -35,9 +35,9 @@ $pdf->SetMargins(5, 29, 5);
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
 $lista_passageiros = $viagem -> lista_seguro($_POST['id_viagem']);
-if (mysql_num_rows($lista_passageiros) > 0) {
+if (count($lista_passageiros) > 0) {
 	$passageiros = array();
-	while ($l = mysql_fetch_array($lista_passageiros)) {
+	foreach ($lista_passageiros as $l) {
 		$passageiros[$l['empresa']][] = array($l['cliente'],$l['cpf'],$l['data_nascimento']);
 	}
 	

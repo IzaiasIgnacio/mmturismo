@@ -13,7 +13,7 @@ class empresa {
 						left join cidade on cidade.id = empresa.id_cidade
 							where empresa.id = ".$empresa;
 	
-		return $conexao -> query($sql);
+		return $conexao -> query($sql)[0];
 	}
 	
 	//buscar historico de reservas de uma empresa
@@ -226,7 +226,7 @@ class empresa {
 			'cnpj' => campo_sql($valores['cnpj']),
 			'site' => campo_sql($valores['site']),
 			'email' => email_sql($valores['email']),
-			'cidade' => $valores['cidade']
+			'id_cidade' => $valores['cidade']
 		];
 
 		$sql = "insert into empresa (empresa, endereco, numero, complemento, bairro, cep, cnpj, site, email, id_cidade) values 
@@ -234,7 +234,7 @@ class empresa {
 		$conexao -> execute($sql, $dados);
 		$id_empresa = $conexao->lastInsertId();
 		
-		if (count($valores['tipo_transporte']) > 0) {
+		if (is_array($valores['tipo_transporte']) && count($valores['tipo_transporte']) > 0) {
 			foreach ($valores['tipo_transporte'] as $e) {
 				$sql = "insert into empresa_tipo_transporte (id_tipo_transporte, id_empresa) values ";
 				$sql .= "('".campo_sql($e)."',".$id_empresa.")";

@@ -35,9 +35,9 @@ $pdf->SetMargins(5, 39, 5);
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
 
 $lista_passageiros = $viagem -> contatos_passageiros($_POST['id_viagem']);
-if (mysql_num_rows($lista_passageiros) > 0) {
+if (count($lista_passageiros) > 0) {
 	$contatos = array();
-	while ($l = mysql_fetch_array($lista_passageiros)) {
+	foreach ($lista_passageiros as $l) {
 		$contatos[$l['numero_transporte']][] = $l;
 	}
 
@@ -46,13 +46,13 @@ if (mysql_num_rows($lista_passageiros) > 0) {
 		$pdf->addPage();
 		foreach($c as $l) {
 			$pdf->SetFont('helvetica', '', 11);
-			$pdf->Cell(120, 0, utf8_encode($l['cliente']), 'B', 0, 'L', 0, '', 1);
+			$pdf->Cell(120, 0, $l['cliente'], 'B', 0, 'L', 0, '', 1);
 			$pdf->Cell(80, 0, $l['telefones'], 'B', 1, 'R', 0, '', 1);
 		}
 	}
 
 	$pdf->Ln(5);
-	$pdf->Cell(200, 0, mysql_num_rows($lista_passageiros).' Passageiros', 0, 1, 'R', 0, '', 1);
+	$pdf->Cell(200, 0, count($lista_passageiros).' Passageiros', 0, 1, 'R', 0, '', 1);
 }
 else {
 	$pdf->Cell(0, 0, 'Nenhum passageiro na viagem', 0, 1, 'C', 0, '', 1);

@@ -1,5 +1,5 @@
 <?php
-switch($_POST[acao]) {
+switch($_POST['acao']) {
 	//listar restaurantes de uma cidade
 	case 'listar_restaurantes':
 		require_once('../classes/restaurante.class.php');
@@ -7,10 +7,10 @@ switch($_POST[acao]) {
 	
 		$lista_restaurante = $restaurante -> listar($_POST['cidade']);
 		
-		if (mysql_num_rows($lista_restaurante) > 0) {
+		if (count($lista_restaurante) > 0) {
 			$html = "<option value=''>Selecione o restaurante</option>";
-			while ($l = mysql_fetch_array($lista_restaurante)) {
-				$html .= "<option value='".$l['id']."'>".utf8_encode($l['restaurante'])."</option>";
+			foreach ($lista_restaurante as $l) {
+				$html .= "<option value='".$l['id']."'>".$l['restaurante']."</option>";
 			}
 		}
 		else {
@@ -25,9 +25,8 @@ switch($_POST[acao]) {
 		require_once('../controles/funcoes.php');
 	
 		$restaurante -> buscar_historico($_POST);
-		if (mysql_num_rows($restaurante->lista) > 0) {
-			while ($l = mysql_fetch_array($restaurante->lista)) {
-				$l = array_map(utf8_encode, $l);
+		if (count($restaurante->lista) > 0) {
+			foreach ($restaurante->lista as $l) {
 				//adicionar ao array
 				$historico[] = $l;
 			}
@@ -45,11 +44,8 @@ switch($_POST[acao]) {
 	
 		$dados = $restaurante -> buscar_dados($_POST['restaurante']);
 	
-		$d = mysql_fetch_array($dados);
-		
 		//retornar como json
-		$d = array_map(utf8_encode, $d);
-		echo json_encode($d);
+		echo json_encode($dados);
 	break;
 	//autocomplete restaurante
 	case 'buscar_restaurante':
@@ -58,9 +54,8 @@ switch($_POST[acao]) {
 		
 		$lista_restaurante = $restaurante -> buscar($_POST['nome']);
 		
-		if (mysql_num_rows($lista_restaurante) > 0) {
-			while($l = mysql_fetch_array($lista_restaurante)) {
-				$l = array_map(utf8_encode, $l);
+		if (count($lista_restaurante) > 0) {
+			foreach ($lista_restaurante as $l) {
 				//adicionar ao array
 				$hoteis[] = $l;
 			}
@@ -79,12 +74,12 @@ switch($_POST[acao]) {
 	
 		$lista_telefones = $restaurante -> buscar_telefones($_POST['id_restaurante']);
 	
-		if (mysql_num_rows($lista_telefones) > 0) {
+		if (count($lista_telefones) > 0) {
 			echo "<tr class='linha' style='display:none'>";
 			echo "	<td colspan='2' class='vazio'>Nenhum telefone informado</td>";
 			echo "</tr>";
 			$c = 0;
-			while ($l = mysql_fetch_array($lista_telefones)) {
+			foreach ($lista_telefones as $l) {
 				echo "	<tr class='linha'>";
 				echo "		<td>".$l['telefone']."</td>";
 				echo "		<td><div class='btn_remover' name='telefone_".$c."'></div></td>";
@@ -106,12 +101,12 @@ switch($_POST[acao]) {
 	
 		$lista_bancos = $restaurante -> buscar_bancos($_POST['id_restaurante']);
 	
-		if (mysql_num_rows($lista_bancos) > 0) {
+		if (count($lista_bancos) > 0) {
 			echo "<tr class='linha' style='display:none'>";
 			echo "	<td colspan='6' class='vazio'>Nenhum banco informado</td>";
 			echo "</tr>";
 			$c = 0;
-			while ($l = mysql_fetch_array($lista_bancos)) {
+			foreach ($lista_bancos as $l) {
 				echo "	<tr class='linha'>";
 				echo "		<td>".$l['banco']."</td>";
 				echo "		<td>".$l['agencia']."</td>";

@@ -191,11 +191,11 @@ controle_categoria('cadastro');
 			</tr>
 		</thead>
 		<tbody>
-			<?php if (mysql_num_rows($lista_categorias) > 0) { ?>
+			<?php if (count($lista_categorias) > 0) { ?>
 				<tr style='display:none' class='linha'>
 					<td colspan='6' class='vazio'>Nenhuma categoria cadastrada</td>
 				</tr>
-				<?php while ($l = mysql_fetch_array($lista_categorias)) { ?>
+				<?php foreach ($lista_categorias as $l) { ?>
 					<tr class='linha'>
 						<td class='td_esquerda'><?php echo utf8_encode($l['categoria']); ?></td>
 						<td><?php echo $l['situacao']; ?></td>

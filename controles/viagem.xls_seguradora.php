@@ -4,8 +4,6 @@ ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);*/
 date_default_timezone_set('America/Sao_Paulo');
 
-define('EOM',(PHP_SAPI == 'cli') ? PHP_EOF : '<br />');
-
 require_once ('../classes/PHPExcel.php');
 require_once('../classes/viagem.class.php');
 require_once('funcoes.php');
@@ -127,9 +125,9 @@ function cabecalho($criar = false) {
 
 $lista_passageiros = $viagem -> lista_seguro($_POST['id_viagem']);
 
-if (mysql_num_rows($lista_passageiros) > 0) {
+if (count($lista_passageiros) > 0) {
 	$passageiros = array();
-	while ($l = mysql_fetch_array($lista_passageiros)) {
+	foreach ($lista_passageiros as $l) {
 		$passageiros[$l['empresa']." ".$l['numero_transporte']][] = array($l['cliente'],$l['cpf'],$l['data_nascimento']);
 	}
 	
@@ -137,12 +135,12 @@ if (mysql_num_rows($lista_passageiros) > 0) {
 	foreach ($passageiros as $transporte => $pessoa) {
 		$planilha = cabecalho($criar);
 		$atual = 5;
-		$planilha->setTitle(utf8_encode($transporte));
+		$planilha->setTitle($transporte);
 		foreach ($pessoa as $p) {
 			$planilha->mergeCells('B'.$atual.':H'.$atual);
 			$planilha->mergeCells('I'.$atual.':J'.$atual);
 			$planilha->mergeCells('K'.$atual.':L'.$atual);
-			$planilha->setCellValue('B'.$atual, utf8_encode($p[0]));
+			$planilha->setCellValue('B'.$atual, $p[0]);
 			$planilha->setCellValueExplicit('I'.$atual, $p[1], PHPExcel_Cell_DataType::TYPE_STRING);
 			$planilha->setCellValue('K'.$atual, $p[2]);
 			$atual++;

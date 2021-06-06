@@ -39,6 +39,9 @@
 				function(resposta){
 					response($.map(resposta,
 					function(item) {
+						if (item.data_saida == null) {
+							item.data_saida = '';
+						}
 						return {
 							//valor para exibir na selecao
 							label: item.viagem+" "+item.data_saida,
@@ -104,6 +107,7 @@
 						//bairros
 						$.post('controles/viagem.jquery.php',{acao:'buscar_bairros',id_viagem:dados['id']},
 						function(resposta) {
+							console.log(resposta)
 							$("#bairros").html(resposta);
 						});
 						

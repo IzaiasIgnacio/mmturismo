@@ -98,7 +98,7 @@ class viagem {
 				replace(valor,'.',',') as valor
 					from viagem
 						where viagem.id = ".$viagem;
-		return $conexao -> query($sql);
+		return $conexao -> query($sql)[0];
 	}
 	
 	//buscar viagem por nome
@@ -298,10 +298,10 @@ class viagem {
 		];
 
 		$sql = "update viagem set
-				viagem = :viagem
-				data_saida = :data_saida
-				valor = :valor
-					where id = :id_viagem";
+					viagem = :viagem,
+					data_saida = :data_saida,
+					valor = :valor
+						where id = :id_viagem";
 		$conexao -> execute($sql, $dados);		
 		
 		//excluir destinos
@@ -359,12 +359,15 @@ class viagem {
 				}
 				if ($transporte != '') {
 					$t = explode(",", $transporte);
+					if (empty($valores['valor_transporte_'.$i])) {
+						$valores['valor_transporte_'.$i] = 0;
+					}
 					//incluir se o transporte nao existir no banco
-					if ($valores['transporte_'.$i] == '') {
+					if ($valores['transporte_'.$i] == '') {						
 						$dados = [
 							'quantidade' => campo_sql($valores['quantidade_transporte_'.$i]),
 							'contato' => campo_sql($valores['contato_transporte_'.$i]),
-							'valor' => nao_obrigatorio_sql(str_replace(",",".",campo_sql($valores['valor_transporte_'.$i]))),
+							'valor' => str_replace(",",".",campo_sql($valores['valor_transporte_'.$i])),
 							'id_viagem' => $id_viagem,
 							'id_empresa_tipo_transporte' => $t[2]
 						];
@@ -380,7 +383,7 @@ class viagem {
 						$dados = [
 							'quantidade' => campo_sql($valores['quantidade_transporte_'.$i]),
 							'contato' => campo_sql($valores['contato_transporte_'.$i]),
-							'valor' => nao_obrigatorio_sql(str_replace(",",".",campo_sql($valores['valor_transporte_'.$i]))),
+							'valor' => str_replace(",",".",campo_sql($valores['valor_transporte_'.$i])),
 							'id_viagem' => $id_viagem,
 							'id_empresa_tipo_transporte' => $t[2],
 							'id_transporte' => $valores['transporte_'.$i]
@@ -639,15 +642,14 @@ class viagem {
 							'id_transporte_viagem' => nao_obrigatorio_sql($empresas_clientes[$valores['transporte_'.$c[0]]]),
 							'id_ponto_embarque' => nao_obrigatorio_sql($valores['ponto_'.$c[0]])
 						];
-						$sql = "insert into viagem_cliente (hora_embarque, numero_transporte, poltrona,
-								id_viagem, id_cliente, id_transporte_viagem, id_ponto_embarque) values ";
-						$sql .= "(:hora_embarque, :numero_transporte, :poltrona,
-								id_viagem, :id_cliente, :id_transporte_viagem, :id_ponto_embarque)";
+						$sql = "insert into viagem_cliente (hora_embarque, numero_transporte, poltrona, id_viagem, id_cliente, id_transporte_viagem, id_ponto_embarque) values
+								(:hora_embarque, :numero_transporte, :poltrona, :id_viagem, :id_cliente, :id_transporte_viagem, :id_ponto_embarque)";
 						$conexao -> execute($sql, $dados);
 						$clientes_viagem[$c[0]] = $conexao -> lastInsertId();
 					}
 					//atualizar se o cliente existir no banco
 					else {
+						$viagem_cliente = $valores['viagem_cliente_'.$i];
 						$dados = [
 							'hora_embarque' => campo_sql($valores['embarque_'.$viagem_cliente]),
 							'numero_transporte' => campo_sql($valores['numero_transporte_'.$viagem_cliente]),
@@ -656,8 +658,7 @@ class viagem {
 							'id_cliente' => $valores['valor_cliente_'.$i],
 							'id_transporte_viagem' => nao_obrigatorio_sql($empresas_clientes[$valores['transporte_'.$viagem_cliente]]),
 							'id_ponto_embarque' => nao_obrigatorio_sql($valores['ponto_'.$viagem_cliente])
-						];
-						$viagem_cliente = $valores['viagem_cliente_'.$i];
+						];						
 						$sql = "update viagem_cliente set
 								hora_embarque = :hora_embarque,
 								numero_transporte = :numero_transporte,
@@ -665,7 +666,7 @@ class viagem {
 								id_viagem = :id_viagem,
 								id_cliente = :id_cliente,
 								id_transporte_viagem = :id_transporte_viagem,
-								id_ponto_embarque = :id_ponto_embarque,
+								id_ponto_embarque = :id_ponto_embarque
 									where id = ".$valores['viagem_cliente_'.$i];
 						$conexao -> execute($sql, $dados);
 						$clientes_viagem[$valores['valor_cliente_'.$i]] = $valores['viagem_cliente_'.$i];
@@ -729,7 +730,7 @@ class viagem {
 											'".campo_sql($valores['apto_'.$i."_".$l])."', ".$i.",
 											nao_obrigatorio('".$valores['acomodacao_'.$i."_".$l]."'), ".$id_viagem.")";
 							$conexao -> execute($sql_rooming);
-							$id_rooming = $conexao -> lastInsertId());
+							$id_rooming = $conexao -> lastInsertId();
 						}
 						//se ja existe no banco, guardar id
 						else {

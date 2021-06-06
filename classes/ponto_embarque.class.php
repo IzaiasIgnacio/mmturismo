@@ -9,7 +9,7 @@ class ponto_embarque {
 		$sql = "insert into ponto_embarque (bairro, local, id_cidade) values ";
 		$sql .= "('".campo_sql($valores['bairro'])."','".campo_sql($valores['local'])."',
 				'".$valores['cidade']."')";
-		return $conexao -> query($sql);
+		return $conexao -> execute($sql);
 	}
 
 	function alterar($valores) {

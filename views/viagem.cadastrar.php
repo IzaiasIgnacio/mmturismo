@@ -472,7 +472,7 @@ controle_viagem('cadastrar');
 					event.preventDefault();
 					//cliente encontrado
 					if (ui.item.value != 0) {
-						//verificar se o cliente já está na viagem
+						//verificar se o cliente jï¿½ estï¿½ na viagem
 						if(!verificar_cliente(ui.item.value)) {
 							//adicionar cliente ao array
 							var posicao = clientes.length;
@@ -528,7 +528,7 @@ controle_viagem('cadastrar');
 							});
 						}
 						else {
-							caixa_mensagem('Aviso','O cliente já está incluído nessa viagem');
+							caixa_mensagem('Aviso','O cliente jï¿½ estï¿½ incluï¿½do nessa viagem');
 						}
 					}
 				}
@@ -1011,7 +1011,7 @@ controle_viagem('cadastrar');
 		$("#data_sinal").tooltip("option","content","Informe a data");
 		$("#valor_sinal").tooltip("option","content","Informe o valor");
 
-		//máscaras
+		//mï¿½scaras
 		//70
 		$("#nome_viagem").mask("%?&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 		//datas
@@ -1137,7 +1137,7 @@ controle_viagem('cadastrar');
 		});
 	}
 	
-	//verificar se um cliente já está na viagem
+	//verificar se um cliente jï¿½ estï¿½ na viagem
 	function verificar_cliente(cliente) {
 		var retorno = false;
 		$(clientes).each(function(i) {
@@ -1188,7 +1188,7 @@ controle_viagem('cadastrar');
 			<label class='label_campo'>Tipo: </label>
 			<select name='tipo_transporte' id='tipo_transporte'>
 				<option value=''>Selecione</option>
-				<?php while ($l = mysql_fetch_array($lista_tipo_transporte)) { ?>
+				<?php foreach ($lista_tipo_transporte as $l) { ?>
 				<option value='<?php echo $l['id']; ?>'><?php echo $l['tipo_transporte']; ?></option>
 				<?php } ?>
 			</select>

@@ -1,5 +1,5 @@
 <?php
-switch($_POST[acao]) {
+switch($_POST['acao']) {
 	//excluir cliente
 	case 'excluir_cliente':
 		require_once('../classes/cliente.class.php');
@@ -14,11 +14,8 @@ switch($_POST[acao]) {
 	
 		$dados = $cliente -> buscar_dados($_POST['cliente']);
 	
-		$d = mysql_fetch_array($dados);
-		
 		//retornar como json
-		$d = array_map(utf8_encode, $d);
-		echo json_encode($d);
+		echo json_encode($dados);
 	break;
 	//historico de viagens de um cliente
 	case 'buscar_historico':
@@ -27,13 +24,12 @@ switch($_POST[acao]) {
 		require_once('../controles/funcoes.php');
 		
 		$cliente -> buscar_historico($_POST);
-		if (mysql_num_rows($cliente->lista) > 0) {
-			while ($l = mysql_fetch_array($cliente->lista)) {
-				$l = array_map(utf8_encode, $l);
+		if (count($cliente->lista) > 0) {
+			foreach ($cliente->lista as $l) {
 				//adicionar ao array
 				$historico[] = $l;
 			}
-			$historico[]['total'] = mysql_result($cliente->total,0,'total');
+			$historico[]['total'] = $cliente->total[0]['total'];
 			echo json_encode($historico);
 		}
 		else {
@@ -47,9 +43,8 @@ switch($_POST[acao]) {
 		
 		$lista_cliente = $cliente -> buscar($_POST['nome']);
 		
-		if (mysql_num_rows($lista_cliente) > 0) {
-			while ($l = mysql_fetch_array($lista_cliente)) {
-				$l = array_map(utf8_encode, $l);
+		if (count($lista_cliente) > 0) {
+			foreach ($lista_cliente as $l) {
 				//adicionar ao array
 				$clientes[] = $l;
 			}
@@ -68,9 +63,8 @@ switch($_POST[acao]) {
 		
 		$lista_cliente = $cliente -> buscar_passageiros($_POST['nome']);
 		
-		if (mysql_num_rows($lista_cliente) > 0) {
-			while ($l = mysql_fetch_array($lista_cliente)) {
-				$l = array_map(utf8_encode, $l);
+		if (count($lista_cliente) > 0) {
+			foreach ($lista_cliente as $l) {
 				//adicionar ao array
 				$clientes[] = $l;
 			}
@@ -97,8 +91,8 @@ switch($_POST[acao]) {
 		echo "		</tr>";
 		echo "	</thead>";
 		echo "	<tbody>";
-		if (mysql_num_rows($lista_telefones) > 0) {
-			while ($l = mysql_fetch_array($lista_telefones)) {
+		if (count($lista_telefones) > 0) {
+			foreach ($lista_telefones as $l) {
 				echo "	<tr class='linha'>";
 				echo "		<td class='td_esquerda'>".$l['telefone']."</td>";
 				echo "		<td>".utf8_encode($l['tipo_telefone'])."</td>";
@@ -120,12 +114,12 @@ switch($_POST[acao]) {
 	
 		$lista_telefones = $cliente -> buscar_telefones($_POST['id_cliente']);
 	
-		if (mysql_num_rows($lista_telefones) > 0) {
+		if (count($lista_telefones) > 0) {
 			echo "<tr class='linha' style='display:none'>";
 			echo "	<td colspan='4' class='vazio'>Nenhum telefone informado</td>";
 			echo "</tr>";
 			$c = 0;
-			while ($l = mysql_fetch_array($lista_telefones)) {
+			foreach ($lista_telefones as $l) {
 				echo "	<tr class='linha'>";
 				echo "		<td>".$l['telefone']."</td>";
 				echo "		<td>".utf8_encode($l['tipo_telefone'])."</td>";
@@ -150,9 +144,8 @@ switch($_POST[acao]) {
 		$cliente = new cliente();
 		
 		$titular = $cliente -> buscar_titular($_POST['cliente']);
-		if (mysql_num_rows($titular) > 0) {
-			$l = mysql_fetch_array($titular);
-			echo json_encode(array_map(utf8_encode, $l));
+		if (count($titular) > 0) {
+			echo json_encode($titular[0]);
 		}
 		else {
 			echo 0;
@@ -164,9 +157,8 @@ switch($_POST[acao]) {
 		$cliente = new cliente();
 		
 		$dependentes = $cliente -> buscar_dependentes($_POST['cliente']);
-		if (mysql_num_rows($dependentes) > 0) {
-			while ($l = mysql_fetch_array($dependentes)) {
-				$l = array_map(utf8_encode, $l);
+		if (count($dependentes) > 0) {
+			foreach ($dependentes as $l) {
 				//adicionar ao array
 				$clientes[] = $l;
 			}

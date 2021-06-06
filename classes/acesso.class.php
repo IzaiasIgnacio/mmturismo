@@ -39,20 +39,20 @@ class acesso {
 		}
 		else {
 			$comp = '';
-			$dados = [
-				'login' => campo_sql($valores['login']),
-				'nome' => campo_sql($valores['nome'])
-			];
+			$dados['login'] = campo_sql($valores['login']);
+			$dados['nome'] = campo_sql($valores['nome']);
+
 			if ($valores['nova_senha'] != '') {
 				$comp = ",senha = :senha";
 				$dados['senha'] = campo_sql(sha1($valores['nova_senha']));
 			}
 			
 			$sql = "update usuario set
-						login = '".campo_sql($valores['login'])."',
-						nome = '".campo_sql($valores['nome'])."'".$comp;
+						login = :login,
+						nome = :nome".$comp."
+							where id = :id";
 						
-			$conexao -> execute($sql);
+			$conexao -> execute($sql, $dados);
 			return 1;
 		}
 	}

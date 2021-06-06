@@ -478,7 +478,7 @@ controle_cliente('cadastrar');
 			<label class='label_campo'>Tipo: </label>
 			<select name='tipo_telefone' id='tipo_telefone'>
 				<option value=''>Selecione</option>
-				<?php while ($lt = mysql_fetch_array($lista_tipo_telefone)) { ?>
+				<?php foreach ($lista_tipo_telefone as $lt) { ?>
 				<option value='<?php echo $lt['id']; ?>'><?php echo $lt['tipo_telefone']; ?></option>
 				<?php } ?>
 			</select>
@@ -498,7 +498,7 @@ controle_cliente('cadastrar');
 			<label class='label_campo'>Situa&ccedil;&atilde;o: </label>
 			<select name='situacao' id='situacao'>
 				<option value=''>Selecione</option>
-				<?php while ($ls = mysql_fetch_array($lista_situacao)) { ?>
+				<?php foreach ($lista_situacao as $ls) { ?>
 				<option value='<?php echo $ls['id']; ?>'><?php echo $ls['situacao']; ?></option>
 				<?php } ?>
 			</select>
@@ -529,7 +529,7 @@ controle_cliente('cadastrar');
 			<label class='label_campo esquerda'>Estado: </label>
 			<select name='estado' id='estado'>
 				<option value=''>Selecione</option>
-				<?php while ($le = mysql_fetch_array($lista_estado)) { ?>
+				<?php foreach ($lista_estado as $le) { ?>
 				<option value='<?php echo $le['id']; ?>'><?php echo $le['sigla']; ?></option>
 				<?php } ?>
 			</select>
@@ -577,7 +577,7 @@ controle_cliente('cadastrar');
 			<label class='label_campo'>&Oacute;rg&atilde;o Emissor: </label>
 			<select name='orgao_emissor' id='orgao_emissor'>
 				<option value=''>Selecione</option>
-				<?php while ($lo = mysql_fetch_array($lista_orgao_emissor)) { ?>
+				<?php foreach ($lista_orgao_emissor as $lo) { ?>
 				<option value='<?php echo $lo['id']; ?>'><?php echo utf8_encode($lo['sigla']); ?></option>
 				<?php } ?>
 			</select>

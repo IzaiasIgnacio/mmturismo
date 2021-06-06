@@ -21,16 +21,28 @@ class database {
     }
 
     public function execute($sql, $binds = null) {
-        $sth = $this->db->prepare($sql);
-        return $sth->execute($binds);
+        try {
+            $sth = $this->db->prepare($sql);
+            return $sth->execute($binds);
+        }
+        catch (\PDOException $e) {
+            // $this->rollback();
+            echo $sql;
+            print_r($binds);
+            throw $e;
+        }
     }
 
     public function begin() {
-        $this->db->begin();
+        $this->db->beginTransaction();
     }
 
     public function commit() {
         $this->db->commit();
+    }
+
+    public function rollback() {
+        $this->db->rollback();
     }
 
     public function lastInsertId() {

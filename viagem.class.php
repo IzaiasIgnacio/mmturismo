@@ -104,8 +104,7 @@ class viagem {
 				replace(valor,'.',',') as valor
 					from viagem
 						where viagem.id = ".$viagem;
-		$r = $conexao -> query($sql);
-		return $r;
+		return $conexao -> query($sql)[0];
 	}
 	
 	//buscar viagem por nome

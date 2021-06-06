@@ -51,9 +51,9 @@ function controle_acesso($acao) {
 				}
 				else {
 					$_SESSION['usuario'] = $_POST['nome'];
-					setcookie("usuario",$_POST['nome'],0);
+					@setcookie("usuario",$_POST['nome'],0);
 					$_SESSION['login'] = $_POST['login'];
-					setcookie("login",$_POST['login'],0);
+					@setcookie("login",$_POST['login'],0);
 					echo "<script>caixa_mensagem('Aviso','Dados atualizados');</script>";
 				}
 			}

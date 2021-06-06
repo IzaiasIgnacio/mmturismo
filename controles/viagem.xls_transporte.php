@@ -4,8 +4,6 @@ ini_set('display_errors', TRUE);
 ini_set('display_startup_errors', TRUE);*/
 date_default_timezone_set('America/Sao_Paulo');
 
-define('EOM',(PHP_SAPI == 'cli') ? PHP_EOF : '<br />');
-
 require_once ('../classes/PHPExcel.php');
 require_once('../classes/viagem.class.php');
 require_once('funcoes.php');
@@ -182,10 +180,10 @@ foreach ($transportes_viagem as $numero => $transporte) {
 			$planilha->mergeCells('L'.$atual.':M'.$atual);
 			$planilha->mergeCells('N'.$atual.':O'.$atual);
 			$planilha->setCellValue('B'.$atual, sprintf("%02d", $i));
-			$planilha->setCellValue('C'.$atual, utf8_encode($c['cliente']));
+			$planilha->setCellValue('C'.$atual, $c['cliente']);
 			$planilha->setCellValue('J'.$atual, $c['data_nascimento']);
 			$planilha->setCellValueExplicit('L'.$atual, $c['rg'], PHPExcel_Cell_DataType::TYPE_STRING);
-			$planilha->setCellValue('N'.$atual, utf8_encode($c['sigla']));
+			$planilha->setCellValue('N'.$atual, $c['sigla']);
 			$atual++;
 			$i++;
 		}
@@ -223,10 +221,10 @@ foreach ($transportes_viagem as $numero => $transporte) {
 			$planilha->mergeCells('L'.$atual.':M'.$atual);
 			$planilha->mergeCells('N'.$atual.':O'.$atual);
 			$planilha->setCellValue('B'.$atual, sprintf("%02d", $i));
-			$planilha->setCellValue('C'.$atual, utf8_encode($crianca['cliente']));
+			$planilha->setCellValue('C'.$atual, $crianca['cliente']);
 			$planilha->setCellValue('J'.$atual, $crianca['data_nascimento']);
 			$planilha->setCellValue('L'.$atual, $crianca['rg']);
-			$planilha->setCellValue('N'.$atual, utf8_encode($crianca['sigla']));
+			$planilha->setCellValue('N'.$atual, $crianca['sigla']);
 			$atual++;
 			$i++;
 		}

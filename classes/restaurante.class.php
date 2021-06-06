@@ -11,7 +11,7 @@ class restaurante {
 						left join cidade on cidade.id = restaurante.id_cidade
 							where restaurante.id = ".$restaurante;
 	
-		return $conexao -> query($sql);
+		return $conexao -> query($sql)[0];
 	}
 	
 	//buscar historico de reservas de um restaurante
@@ -204,7 +204,7 @@ class restaurante {
 			'cnpj' => campo_sql($valores['cnpj']),
 			'site' => campo_sql($valores['site']),
 			'email' => email_sql($valores['email']),
-			'cidade' => $valores['cidade']
+			'id_cidade' => $valores['cidade']
 		];
 
 		$sql = "insert into restaurante (restaurante, endereco, numero, complemento, bairro, cep, cnpj, site, email, id_cidade) values 

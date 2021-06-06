@@ -48,7 +48,7 @@ class cliente {
 					from cliente
 						left join cidade on cidade.id = cliente.id_cidade
 							where cliente.id = ".$cliente;
-		return $conexao -> query($sql);
+		return $conexao -> query($sql)[0];
 	}
 	
 	//buscar historico de viagens de um cliente
@@ -184,7 +184,7 @@ class cliente {
 
 		$sql = "insert into cliente (cliente, sexo, cpf, rg, passaporte, data_nascimento, data_casamento,
 				endereco, numero, complemento, bairro, cep, email, id_cidade, id_orgao_emissor, id_situacao) values 
-				(:cliente, :sexo, :cpf, :rg, :passaporte, :data_nascimento, data_casamento, :endereco, :numero,
+				(:cliente, :sexo, :cpf, :rg, :passaporte, :data_nascimento, :data_casamento, :endereco, :numero,
 				:complemento, :bairro, :cep, :email, :id_cidade, :id_orgao_emissor, :id_situacao)";
 		$conexao -> execute($sql, $dados);
 		$id_cliente = $conexao->lastInsertId();
@@ -213,11 +213,11 @@ class cliente {
 			$sql = "update cliente
 						inner join cliente_dependentes on cliente_dependentes.id_dependente = cliente.id
 							set
-								cliente.endereco = :endereco
-								cliente.numero = :numero
-								cliente.complemento = :complemento
-								cliente.bairro = :bairro
-								cliente.cep = :cep
+								cliente.endereco = :endereco,
+								cliente.numero = :numero,
+								cliente.complemento = :complemento,
+								cliente.bairro = :bairro,
+								cliente.cep = :cep,
 								cliente.id_cidade = :id_cidade
 									where cliente_dependentes.id_titular = :id_titular";
 			$conexao -> execute($sql, $dados_endereco);
@@ -311,7 +311,7 @@ class cliente {
 					email = :email,
 					id_cidade = :id_cidade,
 					id_orgao_emissor = :id_orgao_emissor,
-					id_situacao = :id_situacao,
+					id_situacao = :id_situacao
 						where id = :id_cliente";
 		$conexao -> execute($sql, $dados);
 		

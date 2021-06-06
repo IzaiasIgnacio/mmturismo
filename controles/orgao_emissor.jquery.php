@@ -1,5 +1,5 @@
 <?php
-switch($_POST[acao]) {
+switch($_POST['acao']) {
 	case 'cadastrar_orgao_emissor':
 		require_once ('../classes/orgao_emissor.class.php');
 		$orgao_emissor = new orgao_emissor();

@@ -75,7 +75,7 @@ controle_cliente('lista');
 					<?php foreach ($lista as $l) { ?>
 					<tr class='linha'>
 						<input type="hidden" class="id" value="<?php echo $l['id']; ?>">
-						<td align="left" style="padding-left: 5px"><?php echo utf8_encode($l['cliente']); ?></td>
+						<td align="left" style="padding-left: 5px"><?php echo $l['cliente']; ?></td>
 						<td><?php echo $l['viagens']; ?></td>
 						<td><span class='btn_alterar'>Alterar</span></td>
 						<td><span class='btn_excluir'>Excluir</span></td>

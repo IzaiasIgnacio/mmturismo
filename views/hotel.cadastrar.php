@@ -344,7 +344,7 @@ controle_hotel('cadastrar');
 			<input type='text' name='conta' id='conta' size='20' maxlength='15'>
 			<div class='espaco'></div>
 			<label class='label_campo esquerda'>Titular: </label>
-			<input type='text' name='titular' id='titular' size='70' maxlength='70'>
+			<input type='text' name='titular' id='titular' size='60' maxlength='70'>
 			<div class='espaco'></div>
 			<label class='label_campo esquerda'>CPF / CNPJ: </label>
 			<select name='tipo_documento' id='tipo_documento'>
@@ -382,14 +382,14 @@ controle_hotel('cadastrar');
 			<label class='label_campo esquerda'>Estado: </label>
 			<select name='estado' id='estado'>
 				<option value=''>Selecione</option>
-				<?php while ($le = mysql_fetch_array($lista_estado)) { ?>
+				<?php foreach ($lista_estado as $le) { ?>
 				<option value='<?php echo $le['id']; ?>'><?php echo $le['sigla']; ?></option>
 				<?php } ?>
 			</select>
 			<label class='label_campo'>Cidade: </label>
 			<select name='cidade' id='cidade'>
 				<option value=''>Selecione</option>
-				<?php while ($lc = mysql_fetch_array($lista_cidade)) { ?>
+				<?php foreach ($lista_cidade as $lc) { ?>
 				<option value='<?php echo $lc['id']; ?>'><?php echo $lc['cidade']; ?></option>
 				<?php } ?>
 			</select>

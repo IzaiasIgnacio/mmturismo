@@ -164,7 +164,7 @@ controle_ponto('cadastrar');
 			<label class='label_campo esquerda'>Cidade: </label>
 			<select name='cidade' id='cidade'>
 				<option value=''>Selecione</option>
-				<?php while ($lc = mysql_fetch_array($lista_cidade)) { ?>
+				<?php foreach ($lista_cidade as $lc) { ?>
 				<option value='<?php echo $lc['id']; ?>'><?php echo $lc['cidade']; ?></option>
 				<?php } ?>
 			</select>
@@ -190,11 +190,11 @@ controle_ponto('cadastrar');
 							<td width='8%'>Remover</td>
 						</tr>
 					</thead>
-					<?php if (mysql_num_rows($lista_ponto) > 0) { ?>
+					<?php if (count($lista_ponto) > 0) { ?>
 						<tr style='display:none' class='linha'>
 							<td colspan='5' class='vazio'>Nenhum ponto informado</td>
 						</tr>
-						<?php while ($l = mysql_fetch_array($lista_ponto)) { ?>
+						<?php foreach ($lista_ponto as $l) { ?>
 							<tr class='linha'>
 								<td><?php echo $l['cidade']; ?></td>
 								<td><?php echo $l['bairro']; ?></td>
