@@ -1,11 +1,11 @@
 <?php
 
 class database {
-
+    
     private $host = "localhost";
-	private $usuario = "root";
-    private $senha = "";
-    private $banco = "mmturismo";
+	private $usuario = "cincommt_db";
+    private $senha = "mmturismo42";
+    private $banco = "cincommt_db";
     private $db;
 
     function __construct() {
